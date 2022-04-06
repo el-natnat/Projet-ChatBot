@@ -2,41 +2,58 @@
 // Node.JS Web Server for RiveScript
 //
 
-require('babel-polyfill');
-var express = require('express'),
-  bodyParser = require('body-parser'),
-  RiveScript = require('rivescript');
+
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+  
+  
+  
+const app = express();
+app.use(cors()); // Enable ALL CORS request
+const port = 3001
+  
+  
+app.use(bodyParser.json()) 
+app.use(bodyParser.urlencoded({ extended: true })) 
+
+
+
+
+
+
+
 
 // Create the bot.
 var bot = new RiveScript();
 bot.loadDirectory('./brain').then(success_handler).catch(error_handler);
-
+  
 function success_handler() {
   console.log('Brain loaded!');
   bot.sortReplies();
 
   // Set up the Express app.
   var app = express();
-
+  
   // Parse application/json inputs.
   app.use(bodyParser.json());
   app.set('json spaces', 4);
-
+  
   // Set up routes.
   app.post('/reply', getReply);
   app.get('/', showUsage);
   app.get('*', showUsage);
-
+  
   // Start listening.
-  app.listen(2001, function () {
-    console.log('Listening on http://localhost:2001');
+  app.listen(3001, function () {
+     console.log('Listening on http://localhost:3001');
   });
 }
-
+  
 function error_handler(loadcount, err) {
   console.log('Error loading batch #' + loadcount + ': ' + err + '\n');
 }
-
+  
 // POST to /reply to get a RiveScript reply.
 function getReply(req, res) {
   // Get data from the JSON post.
@@ -48,7 +65,7 @@ function getReply(req, res) {
   if (typeof username === 'undefined' || typeof message === 'undefined') {
     return error(res, 'username and message are required keys');
   }
-
+  
   // Copy any user vars from the post into RiveScript.
   if (typeof vars !== 'undefined') {
     for (var key in vars) {
@@ -79,7 +96,7 @@ function getReply(req, res) {
       });
     });
 }
-
+  
 // All other routes shows the usage to test the /reply route.
 function showUsage(req, res) {
   var egPayload = {
@@ -96,7 +113,7 @@ function showUsage(req, res) {
   res.write('   http://localhost:2001/reply');
   res.end();
 }
-
+  
 // Send a JSON error to the browser.
 function error(res, message) {
   res.json({
@@ -104,3 +121,4 @@ function error(res, message) {
     message: message,
   });
 }
+  
