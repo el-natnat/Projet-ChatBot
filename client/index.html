@@ -12,16 +12,13 @@
 
             modal = document.getElementById("newChatBotModal");
             inputTitle = document.getElementById("inputTitle");
-            inputBrain = document.getElementById("inputBrain");
-
-
-
-
+            inputBrain = document.querySelector('input[name="choix_cerveau"]:checked').value;
+           
 
             newChatBotButton = document.getElementById("newChatBotButton");
             newChatBotButton.addEventListener("click", () => { modal.style.display = "block"; });
 
-            addNewChatBotButton = document.getElementById("addNewTaskButton");
+            addNewChatBotButton = document.getElementById("addNewChatBotButton");
             addNewChatBotButton.addEventListener("click", createNewChatBot);
 
 
@@ -35,7 +32,7 @@
             myHeaders.append('Content-Type', 'application/json');
             let payload = {
                 title: inputTitle.value,
-                cerveau: inputStatus.value
+                cerveau: inputBrain.value
             };
             let myBody = JSON.stringify(payload);
             let myInit = {
@@ -47,6 +44,10 @@
             };
             let myURL = "http://localhost:3001/"; //URL du serveur qui va être lancé
 
+             
+            console.log(inputBrain);
+             
+            console.log(inputTitle.value);
             //launch the request
             fetch(myURL, myInit)
                 .then((httpResponse) => {
@@ -56,13 +57,13 @@
                     reloadList();
                     //clear fields
                     inputTitle.value = "";
-                    inputStatus.value = "";
+                    inputBrain.value = "";
                     console.log(`response is ${responseBody}`);
                 })
                 .catch((err) => {
                     console.log(`ERROR : ${err}`);
                 })
-
+                console.log("Requête POST envoyée");
         }
 
     </script>
@@ -84,9 +85,9 @@
             <p>
                 <label>Choix du cerveau: </label>
                 <input type="radio" name="choix_cerveau" id="cerveau1" />
-                <label for="moins 15ans"> Cerveau 1 </label><br />
-                <input type="radio" name="choix_cerveau" id="cerveau2" />
-                <label for="15-25ans"> Cerveau 2 </label><br />
+                <label> Cerveau 1 </label><br />
+                <input type="radio" name="choix_cerveau" id="cerveau2" checked />
+                <label> Cerveau 2 </label><br />
 
             </p>
 
