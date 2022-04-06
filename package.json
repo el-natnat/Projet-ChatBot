@@ -1,0 +1,23 @@
+{
+  "name": "servicewebprojet",
+  "version": "1.0.0",
+  "description": "ServiceWebProjet",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flguerin/ServiceWebProjet.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flguerin/ServiceWebProjet/issues"
+  },
+  "homepage": "https://github.com/flguerin/ServiceWebProjet#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
