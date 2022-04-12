@@ -4,14 +4,12 @@ import cors from 'cors';
 
 import RiveScript from 'rivescript';
 
+import {Bot} from "./model/Bot.mjs";
+import {BotService} from "./model/BotService.mjs";
+let BotServiceInstance;
 
-import {Bot} from "./model/bot.mjs";
-/*import {TaskService} from "./model/TaskService_ArrayImpl.mjs";
-let taskServiceInstance;
-*/
-
-import {PersonIdentifier,PersonService} from "./model/Persons.mjs";
-let personServiceAccessPoint = new PersonService({url:"http://localhost",port:3001});
+//import {PersonIdentifier,PersonService} from "./model/Persons.mjs";
+//let personServiceAccessPoint = new PersonService({url:"http://localhost",port:3001});
 //Question : How do I assigne a task to a person? : It is a PATCH to a Task...
 
 
@@ -127,47 +125,47 @@ function error(res, message) {
 	});
 }
 
-/*
-app.get('/v2/tasks/', (req, res)=>{
+
+app.get('/', (req, res)=>{
 	try{
-		let myArrayOfTasks;
-		if( undefined == (myArrayOfTasks = taskServiceInstance.getTasks() )){
-			throw new Error("No tasks to get");
+		let myArrayOfBots;
+		if( undefined == (myArrayOfBots = BotServiceInstance.getBots() )){
+			throw new Error("No bots to get");
 		}
-		res.status(200).json(myArrayOfTasks);
+		res.status(200).json(myArrayOfBots);
 	}
 	catch(err){
 		console.log(`Error ${err} thrown... stack is : ${err.stack}`);
 		res.status(404).send('NOT FOUND');
 	}
-});*/
+});
 
-//End point to get a task
-/*app.get('/v2/tasks/:idddd', (req, res)=>{
-	let id = req.params.idddd;
+//End point to get a bot
+app.get('/:idd', (req, res)=>{
+	let id = req.params.idd;
 	if(!isInt(id)) {
 		//not the expected parameter
 		res.status(400).send('BAD REQUEST');
 	}else{
 		try{
-			let myTask = taskServiceInstance.getTask(id);
-			res.status(200).json(myTask);
+			let myBot = BotServiceInstance.getBot(id);
+			res.status(200).json(myBot);
 		}
 		catch(err){
 			console.log(`Error ${err} thrown... stack is : ${err.stack}`);
 			res.status(404).send('NOT FOUND');
 		}
 	}
-});*/
-/*
-app.delete('/v2/tasks/:id',(req,res)=>{
+});
+
+app.delete('/:id',(req,res)=>{
 	let id = req.params.id;
 	if(!isInt(id)) { //Should I propagate a bad parameter to the model?
 		//not the expected parameter
 		res.status(400).send('BAD REQUEST');
 	}else{
-		taskServiceInstance
-			.removeTask(id)
+		BotServiceInstance
+			.removeBot(id)
 			.then((returnString)=>{
 				console.log(returnString);
 				res.status(201).send('All is OK');
@@ -178,12 +176,12 @@ app.delete('/v2/tasks/:id',(req,res)=>{
 			});	
 	}	
 });
-*/
+
 /*
 //create a new task (POST HTTP method)
 app.post('/v2/tasks/',(req,res)=>{
 	let theTaskToAdd = req.body;
-	taskServiceInstance
+	BotServiceInstance
 		.addTask(theTaskToAdd) 
 		.then((returnString)=>{
 			console.log(returnString);
@@ -199,19 +197,19 @@ app.post('/v2/tasks/',(req,res)=>{
 
 app.post('/',(req,res)=>{
 	console.log('cachalot');
-	let theTaskToAdd = req.body;
-	let title = req.body.title;
-	let cerveau = req.body.cerveau;
+	let theBotToAdd = req.body;
+	//let title = req.body.title;
+	//let cerveau = req.body.cerveau;
 
-	let newbot=Bot.create(title,cerveau);
+	//let newbot=Bot.create(title,cerveau);
 	console.log(req.body);
-	console.log(newbot);
-	creer_bot();
+	//console.log(newbot);
+	//creer_bot();
 	console.log('cachalot');
 	
-	res.status(201).send('All is OK');
-	/*taskServiceInstance
-		.addTask(theTaskToAdd) 
+	/*res.status(201).send('All is OK');*/
+	BotServiceInstance
+		.addBot(theBotToAdd) 
 		.then((returnString)=>{
 			console.log(returnString);
 			res.status(201).send('All is OK');
@@ -219,7 +217,7 @@ app.post('/',(req,res)=>{
 		.catch((err)=>{
 			console.log(`Error ${err} thrown... stack is : ${err.stack}`);
 			res.status(400).send('BAD REQUEST');
-		});	*/
+		});	
 });
 
 /*
@@ -230,7 +228,7 @@ app.patch('/v2/tasks/:id',(req,res)=>{
 		res.status(400).send('BAD REQUEST');
 	}else{
 		let newValues = req.body; //the client is responsible for formating its request with proper syntax.
-		taskServiceInstance
+		BotServiceInstance
 			.updateTask(id, newValues)
 			.then((returnString)=>{
 				console.log(returnString);
@@ -250,7 +248,7 @@ app.put('/v2/tasks/:id',(req,res)=>{
 		res.status(400).send('BAD REQUEST');
 	}else{
 		let newValues = req.body; //the client is responsible for formating its request with proper syntax.
-		taskServiceInstance
+		BotServiceInstance
 			.replaceTask(id, newValues)
 			.then((returnString)=>{
 				console.log(returnString);
@@ -271,20 +269,19 @@ let aTask ={ //UGLY
 	'title':'Random Title',
 	'assignement':randomPerson
 };*/
-/*
-TaskService.create(personServiceAccessPoint).then(ts=>{
-	taskServiceInstance=ts;
-	taskServiceInstance
-		.addTask(aTask)
-		.catch((err)=>{console.log(err);});
+
+BotService.create().then(ts=>{
+	BotServiceInstance=ts;
+	/*BotServiceInstance
+		.catch((err)=>{console.log(err);});*/
 	app.listen(port, () => {
   		console.log(`Example app listening at http://localhost:${port}`)
 	});
-});*/
-
+});
+/*
 app.listen(port, () => {
 	console.log(`Example app listening at http://localhost:${port}`)
-});
+});*/
 //HELPER
 /*
 async function getRandomPerson(){

@@ -11,7 +11,7 @@ import cors from 'cors';
 bodyParser = require("body-parser"),
 RiveScript = require("../../lib/rivescript.js");*/
   
-import RiveScript from 'rivescript';
+
 
 const app = express();
 app.use(cors()); // Enable ALL CORS request
