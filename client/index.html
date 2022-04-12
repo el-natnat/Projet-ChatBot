@@ -8,11 +8,17 @@
     <script>
         document.addEventListener('DOMContentLoaded', init);
 
+        let ChatBotListElt;
+
         function init() {
+
+            ChatBotListElt = document.getElementById("ChatBotListUL");
+            reloadList();
 
             modal = document.getElementById("newChatBotModal");
             inputTitle = document.getElementById("inputTitle");
             inputBrain = document.querySelector('input[name="choix_cerveau"]:checked');
+
 
 
             newChatBotButton = document.getElementById("newChatBotButton");
@@ -22,19 +28,152 @@
             addNewChatBotButton.addEventListener("click", createNewChatBot);
 
 
+
         }
+
+        function reloadList() { //Recharge la liste des Bots lancés
+            let myHeaders = new Headers();
+            myHeaders.append('Content-Type', 'application/json');
+
+            let myInit = {
+                method: 'GET',
+                headers: myHeaders,
+                mode: 'cors',
+                cache: 'default'
+            };
+
+            let myURL = "http://localhost:3001/reply";
+
+
+            fetch(myURL, myInit)
+                .then((httpResponse) => {
+                    return httpResponse.json()
+                })
+                .then((setOfBots) => {
+                    for (let bot of setOfBots) {//La requête GET doit renvoyer un setOfBots
+                        ChatBotListElt.appendChild(createItem(bot)); //On ajoute les Bots à ChatBotListElt
+                    }
+                })
+                .catch((err) => {
+                    console.log(`ERROR : ${err}`);
+                })
+
+
+        }
+
+        function createItem(bot) {
+            let item = document.createElement("li");
+
+            // Adding a DELETE Button
+            let delBtn = document.createElement("button");
+            delBtn.innerHTML = "DELETE";
+            delBtn.setAttribute("onclick", `deleteBot(${bot.id})`);
+            item.appendChild(delBtn);
+
+            // Adding a PUT Button
+            let putBtn = document.createElement("button");
+            putBtn.innerHTML = "PUT";
+            putBtn.addEventListener("click", () => { replaceBot(bot.id) });
+            item.appendChild(putBtn);
+
+            // Adding a PATCH Button
+            let patchBtn = document.createElement("button");
+            patchBtn.innerHTML = "PATCH";
+            patchBtn.addEventListener("click", () => { updateBot(bot.id) });
+            item.appendChild(patchBtn);
+
+            item.innerHTML += ` ${bot.title}`;
+            return item;
+        }
+
+
+        function deleteTask(botId) {
+            console.log(`deleting bot with Id ${BotId}`);
+
+            let myHeaders = new Headers();
+			myHeaders.append('Content-Type', 'application/json');
+			let payload = {
+				title: inputTitle.value,
+				cerveau: inputBrain.id
+			};
+			let myBody = JSON.stringify(payload);
+			let myInit = {
+				method: 'DELETE',
+				headers: myHeaders,
+				mode: 'cors',
+				cache: 'default',
+				body: myBody
+			};
+			let myURL = "http://localhost:3001/reply";
+
+			//launch the request
+			fetch(myURL, myInit)
+				.then((httpResponse) => {
+					return httpResponse.text();
+				})
+				.then((responseBody) => {
+					reloadList();// don't forget to reload
+					console.log(`response is ${responseBody}`);
+				})
+				.catch((err) => {
+					console.log(`ERROR : ${err}`);
+				})
+        }
+
+
+        function replaceBot(botId) {
+            console.log(`replacing bot with Id ${BotId}`);
+
+            let modal = document.getElementById("replaceChatBotModal");
+            modal.style.display = "none";
+
+
+
+            let myHeaders = new Headers();
+			myHeaders.append('Content-Type', 'application/json');
+			let payload = {
+				title: inputTitle.value,
+				cerveau: inputBrain.id
+			};
+			let myBody = JSON.stringify(payload);
+			let myInit = {
+				method: 'DELETE',
+				headers: myHeaders,
+				mode: 'cors',
+				cache: 'default',
+				body: myBody
+			};
+			let myURL = "http://localhost:3001/reply";
+
+			//launch the request
+			fetch(myURL, myInit)
+				.then((httpResponse) => {
+					return httpResponse.text();
+				})
+				.then((responseBody) => {
+					reloadList();// don't forget to reload
+					console.log(`response is ${responseBody}`);
+				})
+				.catch((err) => {
+					console.log(`ERROR : ${err}`);
+				})
+        }
+
+
 
         function createNewChatBot() { //Fonction appelée lorsqu'on valide le nom du ChatBot et le cerveau ont été renseigné
             console.log("Nouveau ChatBot créé");
+
+            let modal = document.getElementById("replaceChatBotModal");
 
             modal.style.display = "none";
 
             let myHeaders = new Headers();
             myHeaders.append('Content-Type', 'application/json');
-            
+
             let payload = {
                 title: inputTitle.value,
-                cerveau: inputBrain.value
+                cerveau: inputBrain.id
             };
             let myBody = JSON.stringify(payload);
             let myInit = {
@@ -44,12 +183,12 @@
                 cache: 'default',
                 body: myBody
             };
-            let myURL = "http://localhost:3001/"; //URL du serveur qui va être lancé
+            let myURL = "http://localhost:3001/reply"; //URL du serveur qui va être lancé
 
             console.log(inputTitle.value); // Envoie le titre
             console.log(inputBrain.id); // Envoie "cerveau1" ou "cerveau2"
-            console.log
-      
+            console.log(myInit);
+
             //launch the request
             fetch(myURL, myInit)
                 .then((httpResponse) => {
@@ -76,8 +215,15 @@
 <body>
     <h1> Interface d'administration de ChatBots</h1>
 
+    <!-- Liste des ChatBots à afficher -->
+    <ul id="ChatBotListUL">
+    </ul>
+
+
+
     <button id="newChatBotButton">Ajouter un nouveau ChatBot</button>
 
+    <!-- Modal pour la création d'un bot-->
     <div id="newChatBotModal" class="modal">
 
         <div class="modal-content">
@@ -101,4 +247,32 @@
         </div>
 
     </div>
+
+    <!-- Modal pour le replace d'un bot-->
+    <div id="replaceChatBotModal" class="modal">
+
+        <div class="modal-content">
+            <h1>Replace a new ChatBot</h1>
+            <p>
+                <label for="inputTitle">Nom du ChatBot:</label>
+                <input type="text" id="inputTitle" name="title"></input>
+
+            </p>
+
+            <p>
+                <label>Choix du cerveau: </label>
+                <input type="radio" name="choix_cerveau" id="cerveau1" autofocus checked />
+                <label> Cerveau 1 </label> <br />
+                <input type="radio" name="choix_cerveau" id="cerveau2" />
+                <label> Cerveau 2 </label><br />
+
+            </p>
+            <!-- On réutilise le bouton addnewChatButton ??-->
+            <button id="addNewChatBotButton">Remplacer le ChatBot</button> 
+        </div>
+
+    </div>
+
+
+
 </body>
