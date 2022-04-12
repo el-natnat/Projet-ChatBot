@@ -91,33 +91,33 @@
             console.log(`deleting bot with Id ${BotId}`);
 
             let myHeaders = new Headers();
-			myHeaders.append('Content-Type', 'application/json');
-			let payload = {
-				title: inputTitle.value,
-				cerveau: inputBrain.id
-			};
-			let myBody = JSON.stringify(payload);
-			let myInit = {
-				method: 'DELETE',
-				headers: myHeaders,
-				mode: 'cors',
-				cache: 'default',
-				body: myBody
-			};
-			let myURL = "http://localhost:3001/";
+            myHeaders.append('Content-Type', 'application/json');
+            let payload = {
+                title: inputTitle.value,
+                cerveau: inputBrain.id
+            };
+            let myBody = JSON.stringify(payload);
+            let myInit = {
+                method: 'DELETE',
+                headers: myHeaders,
+                mode: 'cors',
+                cache: 'default',
+                body: myBody
+            };
+            let myURL = "http://localhost:3001/";
 
-			//launch the request
-			fetch(myURL, myInit)
-				.then((httpResponse) => {
-					return httpResponse.text();
-				})
-				.then((responseBody) => {
-					reloadList();// don't forget to reload
-					console.log(`response is ${responseBody}`);
-				})
-				.catch((err) => {
-					console.log(`ERROR : ${err}`);
-				})
+            //launch the request
+            fetch(myURL, myInit)
+                .then((httpResponse) => {
+                    return httpResponse.text();
+                })
+                .then((responseBody) => {
+                    reloadList();// don't forget to reload
+                    console.log(`response is ${responseBody}`);
+                })
+                .catch((err) => {
+                    console.log(`ERROR : ${err}`);
+                })
         }
 
 
@@ -130,33 +130,33 @@
 
 
             let myHeaders = new Headers();
-			myHeaders.append('Content-Type', 'application/json');
-			let payload = {
-				title: inputTitle.value,
-				cerveau: inputBrain.id
-			};
-			let myBody = JSON.stringify(payload);
-			let myInit = {
-				method: 'DELETE',
-				headers: myHeaders,
-				mode: 'cors',
-				cache: 'default',
-				body: myBody
-			};
-			let myURL = "http://localhost:3001/";
+            myHeaders.append('Content-Type', 'application/json');
+            let payload = {
+                title: inputTitle.value,
+                cerveau: inputBrain.id
+            };
+            let myBody = JSON.stringify(payload);
+            let myInit = {
+                method: 'DELETE',
+                headers: myHeaders,
+                mode: 'cors',
+                cache: 'default',
+                body: myBody
+            };
+            let myURL = "http://localhost:3001/";
 
-			//launch the request
-			fetch(myURL, myInit)
-				.then((httpResponse) => {
-					return httpResponse.text();
-				})
-				.then((responseBody) => {
-					reloadList();// don't forget to reload
-					console.log(`response is ${responseBody}`);
-				})
-				.catch((err) => {
-					console.log(`ERROR : ${err}`);
-				})
+            //launch the request
+            fetch(myURL, myInit)
+                .then((httpResponse) => {
+                    return httpResponse.text();
+                })
+                .then((responseBody) => {
+                    reloadList();// don't forget to reload
+                    console.log(`response is ${responseBody}`);
+                })
+                .catch((err) => {
+                    console.log(`ERROR : ${err}`);
+                })
         }
 
 
@@ -268,7 +268,32 @@
 
             </p>
             <!-- On réutilise le bouton addnewChatButton ??-->
-            <button id="addNewChatBotButton">Remplacer le ChatBot</button> 
+            <button id="addNewChatBotButton">Remplacer le ChatBot</button>
+        </div>
+
+    </div>
+
+    <!-- Modal pour communiquer avec le bot-->
+    <div id="CommunicateChatBotModal" class="modal">
+
+        <div class="modal-content">
+            <form onSubmit="sendMessage()">
+                <fieldset>
+                    <legend>Send a Message</legend>
+
+                    <table class="input-table">
+                        <tr>
+                            <td class="text-box">
+                                <input type="text" size="40" name="message" id="message" autocomplete="off" disabled
+                                    placeholder="Please wait... loading...">
+                            </td>
+                            <td class="send-button">
+                                <input type="submit" value="Send">
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </form>
         </div>
 
     </div>
