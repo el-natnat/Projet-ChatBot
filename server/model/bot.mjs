@@ -8,22 +8,24 @@ class Bot{
   constructor(data){   //id,title,comment,tags
     if(undefined != data.title) {
       if(!isString(data.title)){
-        throw new Error("Task Creation : passed Title is not a string");
+        throw new Error("Bot Creation : passed Title is not a string");
       }
       this.title = data.title;
     } else {
       this.title = "";
     }
-    /*if(undefined != data.startDate) {
-      if(!isDate(data.startDate)){
-        throw new Error("Task Creation : passed startDate is not a date");
+    if(undefined != data.cerveau) {
+      if(!isString(data.cerveau)){
+        throw new Error("Bot Creation : passed cerveau is not a cerveau");
       }
-      this.startDate = data.startDate;
+      this.cerveau = data.cerveau;
     } else {
-      this.startDate = new Date();
-    }*/
+      this.cerveau = "";
+    }
 
   }
+
+
   
   static async create(title, cerveau){ 
     return new Bot(title, cerveau);
