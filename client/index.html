@@ -12,8 +12,8 @@
 
             modal = document.getElementById("newChatBotModal");
             inputTitle = document.getElementById("inputTitle");
-            inputBrain = document.querySelector('input[name="choix_cerveau"]:checked').value;
-           
+            inputBrain = document.querySelector('input[name="choix_cerveau"]:checked');
+
 
             newChatBotButton = document.getElementById("newChatBotButton");
             newChatBotButton.addEventListener("click", () => { modal.style.display = "block"; });
@@ -26,10 +26,12 @@
 
         function createNewChatBot() { //Fonction appelée lorsqu'on valide le nom du ChatBot et le cerveau ont été renseigné
             console.log("Nouveau ChatBot créé");
+
             modal.style.display = "none";
 
             let myHeaders = new Headers();
             myHeaders.append('Content-Type', 'application/json');
+            
             let payload = {
                 title: inputTitle.value,
                 cerveau: inputBrain.value
@@ -44,10 +46,10 @@
             };
             let myURL = "http://localhost:3001/"; //URL du serveur qui va être lancé
 
-             
-            console.log(inputBrain);
-             
-            console.log(inputTitle.value);
+            console.log(inputTitle.value); // Envoie le titre
+            console.log(inputBrain.id); // Envoie "cerveau1" ou "cerveau2"
+            console.log
+      
             //launch the request
             fetch(myURL, myInit)
                 .then((httpResponse) => {
@@ -63,7 +65,8 @@
                 .catch((err) => {
                     console.log(`ERROR : ${err}`);
                 })
-                console.log("Requête POST envoyée");
+
+            console.log("Requête POST envoyée avec succès");
         }
 
     </script>
@@ -73,25 +76,28 @@
 <body>
     <h1> Interface d'administration de ChatBots</h1>
 
-    <button id="newChatBotButton">ADD A NEW CHATBOT</button>
+    <button id="newChatBotButton">Ajouter un nouveau ChatBot</button>
 
     <div id="newChatBotModal" class="modal">
 
         <div class="modal-content">
             <h1>Create a new ChatBot</h1>
-            <label for="inputTitle">Title:</label>
-            <input type="text" id="inputTitle" name="title"></input>
+            <p>
+                <label for="inputTitle">Nom du ChatBot:</label>
+                <input type="text" id="inputTitle" name="title"></input>
+
+            </p>
 
             <p>
                 <label>Choix du cerveau: </label>
-                <input type="radio" name="choix_cerveau" id="cerveau1" />
-                <label> Cerveau 1 </label><br />
-                <input type="radio" name="choix_cerveau" id="cerveau2" checked />
+                <input type="radio" name="choix_cerveau" id="cerveau1" autofocus checked />
+                <label> Cerveau 1 </label> <br />
+                <input type="radio" name="choix_cerveau" id="cerveau2" />
                 <label> Cerveau 2 </label><br />
 
             </p>
 
-            <button id="addNewChatBotButton">Add This ChatBot</button>
+            <button id="addNewChatBotButton">Ajouter le ChatBot</button>
         </div>
 
     </div>
