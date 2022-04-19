@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/flguerin/ServiceWebProjet#readme",
   "dependencies": {
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "rivescript": "^2.2.0"
   }
 }
