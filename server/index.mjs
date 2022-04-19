@@ -212,7 +212,8 @@ app.post('/',(req,res)=>{
 		.addBot(theBotToAdd) 
 		.then((returnString)=>{
 			console.log(returnString);
-			res.status(201).send('All is OK');
+			
+			res.status(201).send(theBotToAdd);
 		})
 		.catch((err)=>{
 			console.log(`Error ${err} thrown... stack is : ${err.stack}`);

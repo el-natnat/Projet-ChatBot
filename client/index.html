@@ -32,6 +32,11 @@
         }
 
         function reloadList() { //Recharge la liste des Bots lancés
+
+            while(ChatBotListElt.firstChild){
+                ChatBotListElt.removeChild(ChatBotListElt.firstChild);
+            }
+
             let myHeaders = new Headers();
             myHeaders.append('Content-Type', 'application/json');
 
@@ -82,13 +87,20 @@
             patchBtn.addEventListener("click", () => { updateBot(bot.id) });
             item.appendChild(patchBtn);
 
+            // Adding a TALK Button
+            let talkBtn = document.createElement("button");
+            talkBtn.innerHTML = "Talk";
+            talkBtn.addEventListener("click", () => { talkBot(bot.id) });
+            item.appendChild(talkBtn);
+
+
             item.innerHTML += ` ${bot.title}`;
             return item;
         }
 
 
-        function deleteTask(botId) {
-            console.log(`deleting bot with Id ${BotId}`);
+        function deleteBot(botId) {//A corriger
+            console.log(`deleting bot with Id ${botId}`);
 
             let myHeaders = new Headers();
             myHeaders.append('Content-Type', 'application/json');
@@ -121,8 +133,8 @@
         }
 
 
-        function replaceBot(botId) {
-            console.log(`replacing bot with Id ${BotId}`);
+        function replaceBot(botId) {//A corriger
+            console.log(`replacing bot with Id ${botId}`);
 
             let modal = document.getElementById("replaceChatBotModal");
             modal.style.display = "none";
@@ -137,7 +149,7 @@
             };
             let myBody = JSON.stringify(payload);
             let myInit = {
-                method: 'DELETE',
+                method: 'PUT',
                 headers: myHeaders,
                 mode: 'cors',
                 cache: 'default',
@@ -164,7 +176,7 @@
         function createNewChatBot() { //Fonction appelée lorsqu'on valide le nom du ChatBot et le cerveau ont été renseigné
             console.log("Nouveau ChatBot créé");
 
-            let modal = document.getElementById("replaceChatBotModal");
+            let modal = document.getElementById("newChatBotModal");
 
             modal.style.display = "none";
 
@@ -206,6 +218,11 @@
                 })
 
             console.log("Requête POST envoyée avec succès");
+        }
+
+
+        function talkBot(botId){//Talk with the bot
+
         }
 
     </script>
