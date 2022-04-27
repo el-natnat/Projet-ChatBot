@@ -1,11 +1,20 @@
 import {PersonIdentifier} from "./Persons.mjs";
 
 class Bot{
-  
+
+  static id = this.id;
   static title = this.title;
   static cerveau  = this.cerveau;
 
   constructor(data){   //id,title,comment,tags
+    if(undefined != data.id) {
+      if(!isInt(data.id)){
+        throw new Error("Task Creation : passed Id is not an integer");
+      }
+      this.id = data.id;
+    } else {
+      this.id = parseInt(    Math.floor(Math.random() * Math.floor(100000))     );
+    }
     if(undefined != data.title) {
       if(!isString(data.title)){
         throw new Error("Bot Creation : passed Title is not a string");
@@ -24,8 +33,6 @@ class Bot{
     }
 
   }
-
-
   
   static async create(title, cerveau){ 
     return new Bot(title, cerveau);
