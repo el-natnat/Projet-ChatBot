@@ -33,7 +33,7 @@
 
         function reloadList() { //Recharge la liste des Bots lancés
 
-            while(ChatBotListElt.firstChild){
+            while (ChatBotListElt.firstChild) {
                 ChatBotListElt.removeChild(ChatBotListElt.firstChild);
             }
 
@@ -88,9 +88,14 @@
             item.appendChild(patchBtn);
 
             // Adding a TALK Button
-            let talkBtn = document.createElement("button");
+            /*let talkBtn = document.createElement("button");
             talkBtn.innerHTML = "Talk";
             talkBtn.addEventListener("click", () => { talkBot(bot.id) });
+            item.appendChild(talkBtn);*/
+
+            let talkBtn = document.createElement("button");
+            talkBtn.innerHTML = "TALK";
+            talkBtn.setAttribute("onclick", `talkBot(${bot.id})`);
             item.appendChild(talkBtn);
 
 
@@ -99,7 +104,7 @@
         }
 
 
-        function deleteBot(botId) {//A corriger
+        function deleteBot(botId) {
             console.log(`deleting bot with Id ${botId}`);
 
             let myHeaders = new Headers();
@@ -199,7 +204,7 @@
 
             console.log(inputTitle.value); // Envoie le titre
             console.log(inputBrain.id); // Envoie "cerveau1" ou "cerveau2"
-            console.log(myInit);
+            
 
             //launch the request
             fetch(myURL, myInit)
@@ -221,7 +226,58 @@
         }
 
 
-        function talkBot(botId){//Talk with the bot
+        function talkBot(botTitle) {//Talk with the bot
+            //Fonction appelée lorsqu'on appuie sur Chat
+            console.log(`Lancement de la conversion avec le bot ${botTitle  }`);
+
+            let modal = document.getElementById("CommunicateChatBotModal");
+
+            modal.style.display = "block";
+
+            
+        }
+
+        function sendMessage(){ //When pushing the Send button
+            
+
+
+            let myHeaders = new Headers();
+            myHeaders.append('Content-Type', 'application/json');
+
+            let payload = {
+                message: message.value
+            };
+            let myBody = JSON.stringify(payload);
+            let myInit = {
+                method: 'POST',
+                headers: myHeaders,
+                mode: 'cors',
+                cache: 'default',
+                body: myBody
+            };
+            let myURL = "http://localhost:3001/reply"; //URL du serveur qui va être lancé
+
+            console.log(message.value); // Envoie "cerveau1" ou "cerveau2"
+            
+
+            //launch the request
+            fetch(myURL, myInit)
+                .then((httpResponse) => {
+                    return httpResponse.text();
+                })
+                .then((responseBody) => {
+                    reloadList();
+                    //clear fields
+                    inputTitle.value = "";
+                    inputBrain.value = "";
+                    console.log(`response is ${responseBody}`);
+                })
+                .catch((err) => {
+                    console.log(`ERROR : ${err}`);
+                })
+
+            console.log("Requête POST envoyée avec succès");
+            console.log(`Le message "${message.value}" a été envoyé dans la requête post au Bot`);
 
         }
 
@@ -301,7 +357,7 @@
                     <table class="input-table">
                         <tr>
                             <td class="text-box">
-                                <input type="text" size="40" name="message" id="message" autocomplete="off" disabled
+                                <input type="text" size="40" name="message" id="message" autocomplete="off" 
                                     placeholder="Please wait... loading...">
                             </td>
                             <td class="send-button">

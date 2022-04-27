@@ -159,8 +159,9 @@ app.get('/:idd', (req, res)=>{
 });
 
 app.delete('/:id',(req,res)=>{
+	console.log(req);
 	let id = req.params.id;
-	if(!isInt(id)) { //Should I propagate a bad parameter to the model?
+	if(!isInt(id)) { 
 		//not the expected parameter
 		res.status(400).send('BAD REQUEST');
 	}else{
