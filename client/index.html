@@ -264,7 +264,7 @@
                     return httpResponse.text();
                 })
                 .then((responseBody) => {
-                    reloadList();
+                    //reloadList();
                     //clear fields
                     inputTitle.value = "";
                     inputBrain.value = "";
@@ -348,7 +348,8 @@
     <div id="CommunicateChatBotModal" class="modal">
 
         <div class="modal-content">
-            <form onSubmit="sendMessage()">
+            <!--<form onSubmit="sendMessage()"> --> 
+                <!-- <form action="http://localhost:3001/reply"   onSubmit="sendMessage()"> 
                 <fieldset>
                     <legend>Send a Message</legend>
 
@@ -359,12 +360,27 @@
                                     placeholder="Talk with the bot">
                             </td>
                             <td class="send-button">
-                                <input type="submit" value="Send">
+                                <input type="submit" value="Send" onclick="sendMessage()">
                             </td>
                         </tr>
                     </table>
                 </fieldset>
-            </form>
+            </form> -->
+            <fieldset>
+                <legend>Send a Message</legend>
+
+                <table class="input-table">
+                    <tr>
+                        <td class="text-box">
+                            <input type="text" size="40" name="message" id="message" autocomplete="off" 
+                                placeholder="Please wait... loading...">
+                        </td>
+                        <td class="send-button">
+                            <input type="submit" value="Send" onclick="sendMessage()">
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
         </div>
 
     </div>
