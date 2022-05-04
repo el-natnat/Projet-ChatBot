@@ -30,6 +30,7 @@ function creer_bot() {
 	// Create the bot.
 	var script = new RiveScript();
 	script.loadDirectory('./brain').then(success_handler(script)).catch(error_handler);
+	return script;
 }
 
 function success_handler(script) {
@@ -276,6 +277,7 @@ BotService.create().then(ts=>{
 	BotServiceInstance=ts;
 	/*BotServiceInstance
 		.catch((err)=>{console.log(err);});*/
+	success_handler(creer_bot());
 	app.listen(port, () => {
   		console.log(`Example app listening at http://localhost:${port}`)
 	});
