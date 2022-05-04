@@ -75,17 +75,13 @@
             delBtn.setAttribute("onclick", `deleteBot(${bot.id})`);
             item.appendChild(delBtn);
 
-            // Adding a PUT Button
+            // Adding a REPLACE Button
             let putBtn = document.createElement("button");
-            putBtn.innerHTML = "PUT";
-            putBtn.addEventListener("click", () => { replaceBot(bot.id) });
+            putBtn.innerHTML = "REPLACE";
+            putBtn.setAttribute("onclick", `replaceBot(${bot.id})`);
             item.appendChild(putBtn);
 
-            // Adding a PATCH Button
-            let patchBtn = document.createElement("button");
-            patchBtn.innerHTML = "PATCH";
-            patchBtn.addEventListener("click", () => { updateBot(bot.id) });
-            item.appendChild(patchBtn);
+
 
             // Adding a TALK Button
             /*let talkBtn = document.createElement("button");
@@ -142,7 +138,7 @@
             console.log(`replacing bot with Id ${botId}`);
 
             let modal = document.getElementById("replaceChatBotModal");
-            modal.style.display = "none";
+            modal.style.display = "block";
 
 
 
@@ -204,7 +200,7 @@
 
             console.log(inputTitle.value); // Envoie le titre
             console.log(inputBrain.id); // Envoie "cerveau1" ou "cerveau2"
-            
+
 
             //launch the request
             fetch(myURL, myInit)
@@ -234,20 +230,20 @@
 
             modal.style.display = "block";
 
-            
+
         }
 
-        function sendMessage(){ //When pushing the Send button
-            
+        function sendMessage() { //When pushing the Send button
+
 
 
             let myHeaders = new Headers();
             myHeaders.append('Content-Type', 'application/json');
 
             let payload = {
-            
+
                 message: message.value
-                
+
             };
             let myBody = JSON.stringify(payload);
             let myInit = {
@@ -260,7 +256,7 @@
             let myURL = "http://localhost:3001/reply"; //URL du serveur qui va être lancé
 
             console.log(message.value); // Envoie "cerveau1" ou "cerveau2"
-            
+
 
             //launch the request
             fetch(myURL, myInit)
@@ -359,7 +355,7 @@
                     <table class="input-table">
                         <tr>
                             <td class="text-box">
-                                <input type="text" size="40" name="message" id="message" autocomplete="off" 
+                                <input type="text" size="40" name="message" id="message" autocomplete="off"
                                     placeholder="Talk with the bot">
                             </td>
                             <td class="send-button">
