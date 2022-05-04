@@ -46,6 +46,7 @@ function success_handler(script) {
   
   // Set up routes.
   app.post('/reply', getReply);
+  
   //app.get('*', showUsage);
   
   /*// Start listening.
@@ -60,6 +61,8 @@ function error_handler(loadcount, err) {
 
 // POST to /reply to get a RiveScript reply.
 function getReply(req, res) {
+
+	console.log("getReply");
 	// Get data from the JSON post.
 	var username = req.body.username;
 	var message = req.body.message;
@@ -160,11 +163,13 @@ app.get('/:idd', (req, res)=>{
 });
 
 app.delete('/:id',(req,res)=>{
-	console.log(req);
+	
+	console.log(req.body);
 	let id = req.params.id;
+	console.log(id);
 	if(!isInt(id)) { 
 		//not the expected parameter
-		res.status(400).send('BAD REQUEST');
+		res.status(400).send('BAD REQUEST bad id');
 	}else{
 		BotServiceInstance
 			.removeBot(id)
@@ -174,7 +179,7 @@ app.delete('/:id',(req,res)=>{
 			})
 			.catch((err)=>{
 				console.log(`Error ${err} thrown... stack is : ${err.stack}`);
-				res.status(400).send('BAD REQUEST');
+				res.status(400).send('BAD REQUEST ERROR');
 			});	
 	}	
 });
@@ -205,6 +210,7 @@ app.post('/',(req,res)=>{
 
 	//let newbot=Bot.create(title,cerveau);
 	console.log(req.body);
+;
 	//console.log(newbot);
 	//creer_bot();
 	console.log('cachalot');
@@ -293,10 +299,10 @@ async function getRandomPerson(){
 	let key = Math.floor(Math.random() * tempArray.length) ;
 	return tempArray[key];
 }*/
-/*
+
 function isInt(value) {
   let x = parseFloat(value);
   return !isNaN(value) && (x | 0) === x;
 }
-*/
+
 

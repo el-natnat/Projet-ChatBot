@@ -121,7 +121,7 @@
                 cache: 'default',
                 body: myBody
             };
-            let myURL = "http://localhost:3001/";
+            let myURL = `http://localhost:3001/${botId}`;
 
             //launch the request
             fetch(myURL, myInit)
@@ -226,9 +226,9 @@
         }
 
 
-        function talkBot(botTitle) {//Talk with the bot
+        function talkBot(botId) {//Talk with the bot
             //Fonction appelée lorsqu'on appuie sur Chat
-            console.log(`Lancement de la conversion avec le bot ${botTitle  }`);
+            console.log(`Lancement de la conversion avec le bot ${botId}`);
 
             let modal = document.getElementById("CommunicateChatBotModal");
 
@@ -245,7 +245,9 @@
             myHeaders.append('Content-Type', 'application/json');
 
             let payload = {
+            
                 message: message.value
+                
             };
             let myBody = JSON.stringify(payload);
             let myInit = {
@@ -358,7 +360,7 @@
                         <tr>
                             <td class="text-box">
                                 <input type="text" size="40" name="message" id="message" autocomplete="off" 
-                                    placeholder="Please wait... loading...">
+                                    placeholder="Talk with the bot">
                             </td>
                             <td class="send-button">
                                 <input type="submit" value="Send">
