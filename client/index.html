@@ -276,7 +276,9 @@
 
             console.log("Requête POST envoyée avec succès");
             console.log(`Le message "${message.value}" a été envoyé dans la requête post au Bot`);
+            let modal = document.getElementById("CommunicateChatBotModal");
 
+            modal.style.display = "none";
         }
 
     </script>
@@ -348,8 +350,8 @@
     <div id="CommunicateChatBotModal" class="modal">
 
         <div class="modal-content">
-            <!--<form onSubmit="sendMessage()"> --> 
-                <!-- <form action="http://localhost:3001/reply"   onSubmit="sendMessage()"> 
+            <!--<form onSubmit="sendMessage()"> -->
+            <!-- <form action="http://localhost:3001/reply"   onSubmit="sendMessage()"> 
                 <fieldset>
                     <legend>Send a Message</legend>
 
@@ -372,7 +374,7 @@
                 <table class="input-table">
                     <tr>
                         <td class="text-box">
-                            <input type="text" size="40" name="message" id="message" autocomplete="off" 
+                            <input type="text" size="40" name="message" id="message" autocomplete="off"
                                 placeholder="Please wait... loading...">
                         </td>
                         <td class="send-button">
