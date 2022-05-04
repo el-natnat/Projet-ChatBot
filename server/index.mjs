@@ -25,13 +25,11 @@ const port = 3001
 app.use(bodyParser.json()) 
 app.use(bodyParser.urlencoded({ extended: true })) 
 
+// Create the bot.
+var script = new RiveScript();
+script.loadDirectory('./brain').then(success_handler(script)).catch(error_handler);
 
-function creer_bot() {
-	// Create the bot.
-	var script = new RiveScript();
-	script.loadDirectory('./brain').then(success_handler(script)).catch(error_handler);
-	return script;
-}
+
 
 function success_handler(script) {
   console.log('Brain loaded!');
@@ -45,7 +43,8 @@ function success_handler(script) {
   app.set('json spaces', 4);
   
   // Set up routes.
-  app.post('/reply', getReply);
+  console.log('Route set');
+  app.post('/efse', getReply);
   //app.get('*', showUsage);
   
   /*// Start listening.
@@ -60,6 +59,8 @@ function error_handler(loadcount, err) {
 
 // POST to /reply to get a RiveScript reply.
 function getReply(req, res) {
+
+	console.log("Entree reply");
 	// Get data from the JSON post.
 	var username = req.body.username;
 	var message = req.body.message;
@@ -67,6 +68,7 @@ function getReply(req, res) {
   
 	// Make sure username and message are included.
 	if (typeof username === 'undefined' || typeof message === 'undefined') {
+	  console.log("Erreur username / message");
 	  return error(res, 'username and message are required keys');
 	}
 	
@@ -87,6 +89,7 @@ function getReply(req, res) {
 		vars = script.getUservars(username);
   
 		// Send the JSON response.
+		console.log("normalement c'est bon")
 		res.json({
 		  status: 'ok',
 		  reply: reply,
@@ -139,6 +142,13 @@ app.get('/', (req, res)=>{
 		console.log(`Error ${err} thrown... stack is : ${err.stack}`);
 		res.status(404).send('NOT FOUND');
 	}
+});
+
+app.post('/reply', (req, res)=>{
+	//let body = req.body;
+	console.log("là ?");
+	res.status(200).json(["toto"]);
+
 });
 
 //End point to get a bot
@@ -277,7 +287,6 @@ BotService.create().then(ts=>{
 	BotServiceInstance=ts;
 	/*BotServiceInstance
 		.catch((err)=>{console.log(err);});*/
-	success_handler(creer_bot());
 	app.listen(port, () => {
   		console.log(`Example app listening at http://localhost:${port}`)
 	});
