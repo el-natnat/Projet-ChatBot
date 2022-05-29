@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style.css" />
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', init);
+
+        let ChatBotListElt;
+
+        function init() {
+
+            ChatBotListElt = document.getElementById("ChatBotListUL");
+            reloadList();
+
+            modal = document.getElementById("newChatBotModal");
+            inputTitle = document.getElementById("inputTitle");
+            inputBrain = document.querySelector('input[name="choix_cerveau"]:checked');
+
+
+
+            newChatBotButton = document.getElementById("newChatBotButton");
+            newChatBotButton.addEventListener("click", () => { modal.style.display = "block"; });
+
+            addNewChatBotButton = document.getElementById("addNewChatBotButton");
+            addNewChatBotButton.addEventListener("click", createNewChatBot);
+
+
+
+        }
+
+        function reloadList() { //Recharge la liste des Bots lancés
+
+            while (ChatBotListElt.firstChild) {
+                ChatBotListElt.removeChild(ChatBotListElt.firstChild);
+            }
+
+            let myHeaders = new Headers();
+            myHeaders.append('Content-Type', 'application/json');
+
+            let myInit = {
+                method: 'GET',
+                headers: myHeaders,
+                mode: 'cors',
+                cache: 'default'
+            };
+
+            let myURL = "http://localhost:3001/";
+
+
+            fetch(myURL, myInit)
+                .then((httpResponse) => {
+                    return httpResponse.json()
+                })
+                .then((setOfBots) => {
+                    for (let bot of setOfBots) {//La requête GET doit renvoyer un setOfBots
+                        ChatBotListElt.appendChild(createItem(bot)); //On ajoute les Bots à ChatBotListElt
+                    }
+                })
+                .catch((err) => {
+                    console.log(`ERROR : ${err}`);
+                })
+
+
+        }
+
+        function createItem(bot) {
+            let item = document.createElement("li");
+
+            // Adding a DELETE Button
+            let delBtn = document.createElement("button");
+            delBtn.innerHTML = "DELETE";
+            delBtn.setAttribute("onclick", `deleteBot(${bot.id})`);
+            item.appendChild(delBtn);
+
+            // Adding a REPLACE Button
+            let putBtn = document.createElement("button");
+            putBtn.innerHTML = "REPLACE";
+            putBtn.setAttribute("onclick", `replaceBot(${bot.id})`);
+            item.appendChild(putBtn);
+
+
+
+            // Adding a TALK Button
+            /*let talkBtn = document.createElement("button");
+            talkBtn.innerHTML = "Talk";
+            talkBtn.addEventListener("click", () => { talkBot(bot.id) });
+            item.appendChild(talkBtn);*/
+
+            let talkBtn = document.createElement("button");
+            talkBtn.innerHTML = "TALK";
+            talkBtn.setAttribute("onclick", `talkBot(${bot.id})`);
+            item.appendChild(talkBtn);
+
+
+            item.innerHTML += ` ${bot.title}`;
+            return item;
+        }
+
+
+        function deleteBot(botId) {
+            console.log(`deleting bot with Id ${botId}`);
+
+            let myHeaders = new Headers();
+            myHeaders.append('Content-Type', 'application/json');
+            let payload = {
+                title: inputTitle.value,
+                cerveau: inputBrain.id
+            };
+            let myBody = JSON.stringify(payload);
+            let myInit = {
+                method: 'DELETE',
+                headers: myHeaders,
+                mode: 'cors',
+                cache: 'default',
+                body: myBody
+            };
+            let myURL = `http://localhost:3001/${botId}`;
+
+            //launch the request
+            fetch(myURL, myInit)
+                .then((httpResponse) => {
+                    return httpResponse.text();
+                })
+                .then((responseBody) => {
+                    reloadList();// don't forget to reload
+                    console.log(`response is ${responseBody}`);
+                })
+                .catch((err) => {
+                    console.log(`ERROR : ${err}`);
+                })
+        }
+
+
+        function replaceBot(botId) {//A corriger
+            console.log(`replacing bot with Id ${botId}`);
+
+            let modal = document.getElementById("replaceChatBotModal");
+            modal.style.display = "block";
+
+
+
+            let myHeaders = new Headers();
+            myHeaders.append('Content-Type', 'application/json');
+            let payload = {
+                title: inputTitle.value,
+                cerveau: inputBrain.id
+            };
+            let myBody = JSON.stringify(payload);
+            let myInit = {
+                method: 'PUT',
+                headers: myHeaders,
+                mode: 'cors',
+                cache: 'default',
+                body: myBody
+            };
+            let myURL = "http://localhost:3001/";
+
+            //launch the request
+            fetch(myURL, myInit)
+                .then((httpResponse) => {
+                    return httpResponse.text();
+                })
+                .then((responseBody) => {
+                    reloadList();// don't forget to reload
+                    console.log(`response is ${responseBody}`);
+                })
+                .catch((err) => {
+                    console.log(`ERROR : ${err}`);
+                })
+        }
+
+
+
+        function createNewChatBot() { //Fonction appelée lorsqu'on valide le nom du ChatBot et le cerveau ont été renseigné
+            console.log("Nouveau ChatBot créé");
+
+            let modal = document.getElementById("newChatBotModal");
+
+            modal.style.display = "none";
+
+            let myHeaders = new Headers();
+            myHeaders.append('Content-Type', 'application/json');
+
+            let payload = {
+                title: inputTitle.value,
+                cerveau: inputBrain.id
+            };
+            let myBody = JSON.stringify(payload);
+            let myInit = {
+                method: 'POST',
+                headers: myHeaders,
+                mode: 'cors',
+                cache: 'default',
+                body: myBody
+            };
+            let myURL = "http://localhost:3001/"; //URL du serveur qui va être lancé
+
+            console.log(inputTitle.value); // Envoie le titre
+            console.log(inputBrain.id); // Envoie "cerveau1" ou "cerveau2"
+
+
+            //launch the request
+            fetch(myURL, myInit)
+                .then((httpResponse) => {
+                    return httpResponse.text();
+                })
+                .then((responseBody) => {
+                    reloadList();
+                    //clear fields
+                    inputTitle.value = "";
+                    inputBrain.value = "";
+                    console.log(`response is ${responseBody}`);
+                })
+                .catch((err) => {
+                    console.log(`ERROR : ${err}`);
+                })
+
+            console.log("Requête POST envoyée avec succès");
+        }
+
+
+        function talkBot(botId) {//Talk with the bot
+            //Fonction appelée lorsqu'on appuie sur TALK
+            console.log(`Lancement de la conversion avec le bot ${botId}`);
+
+            let modal = document.getElementById("CommunicateChatBotModal");
+
+            modal.style.display = "block";
+
+
+        }
+
+        function sendMessage() { //When pushing the Send button
+
+            let myHeaders = new Headers();
+            myHeaders.append('Content-Type', 'application/json');
+
+            let payload = {
+                username: 11862,
+                message: message.value
+
+            };
+            let myBody = JSON.stringify(payload);
+            let myInit = {
+                method: 'POST',
+                headers: myHeaders,
+                mode: 'cors',
+                cache: 'default',
+                body: myBody
+            };
+            let myURL = "http://localhost:3001/reply"; //URL du serveur qui va être lancé
+
+            console.log(message);
+            console.log(message.value);
+
+
+            //launch the request
+            fetch(myURL, myInit)
+                .then((httpResponse) => {
+                    return httpResponse.text();
+                })
+                .then((responseBody) => {
+                    //reloadList();
+                    //clear fields
+                    inputTitle.value = "";
+                    inputBrain.value = "";
+                    console.log(`response is ${responseBody}`);
+                })
+                .catch((err) => {
+                    console.log(`ERROR : ${err}`);
+                })
+
+            console.log("Requête POST envoyée avec succès");
+            console.log(`Le message "${message.value}" a été envoyé dans la requête post au Bot "" `);
+
+            let modal = document.getElementById("CommunicateChatBotModal");
+            modal.style.display = "none";
+        }
+
+    </script>
+
+</head>
+
+<body>
+    <h1> Interface d'administration des Bots</h1>
+
+    <nav>
+        <ul>
+            <li><a href="./administration.html">Gestion des Bots</a></li>
+            <li><a href="./communicate.html">Communiquer avec les Bots</a></li>
+        </ul>
+    </nav>
+
+    <!-- Liste des ChatBots à afficher -->
+    <ul id="ChatBotListUL">
+    </ul>
+
+
+
+    <button id="newChatBotButton">Ajouter un nouveau ChatBot</button>
+
+    <!-- Modal pour la création d'un bot-->
+    <div id="newChatBotModal" class="modal">
+
+        <div class="modal-content">
+            <h1>Create a new ChatBot</h1>
+            <p>
+                <label for="inputTitle">Nom du ChatBot:</label>
+                <input type="text" id="inputTitle" name="title"></input>
+
+            </p>
+
+            <p>
+                <label>Choix du cerveau: </label>
+                <input type="radio" name="choix_cerveau" id="cerveau1" autofocus checked />
+                <label> Cerveau 1 </label> <br />
+                <input type="radio" name="choix_cerveau" id="cerveau2" />
+                <label> Cerveau 2 </label><br />
+
+            </p>
+
+            <button id="addNewChatBotButton">Ajouter le ChatBot</button>
+        </div>
+
+    </div>
+
+    <!-- Modal pour le replace d'un bot-->
+    <div id="replaceChatBotModal" class="modal">
+
+        <div class="modal-content">
+            <h1>Replace a new ChatBot</h1>
+            <p>
+                <label for="inputTitle">Nom du ChatBot:</label>
+                <input type="text" id="inputTitle" name="title"></input>
+
+            </p>
+
+            <p>
+                <label>Choix du cerveau: </label>
+                <input type="radio" name="choix_cerveau" id="cerveau1" autofocus checked />
+                <label> Cerveau 1 </label> <br />
+                <input type="radio" name="choix_cerveau" id="cerveau2" />
+                <label> Cerveau 2 </label><br />
+
+            </p>
+            <!-- On réutilise le bouton addnewChatButton ??-->
+            <button id="addNewChatBotButton">Remplacer le ChatBot</button>
+        </div>
+
+    </div>
+
+    <!-- Modal pour communiquer avec le bot-->
+    <div id="CommunicateChatBotModal" class="modal">
+
+        <div class="modal-content">
+            <!--<form onSubmit="sendMessage()"> -->
+            <!-- <form action="http://localhost:3001/reply"   onSubmit="sendMessage()"> 
+                <fieldset>
+                    <legend>Send a Message</legend>
+
+                    <table class="input-table">
+                        <tr>
+                            <td class="text-box">
+                                <input type="text" size="40" name="message" id="message" autocomplete="off"
+                                    placeholder="Talk with the bot">
+                            </td>
+                            <td class="send-button">
+                                <input type="submit" value="Send" onclick="sendMessage()">
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </form> -->
+            <label>Bot numéro ${botId} </label>
+            <fieldset>
+                <legend>Send a Message</legend>
+
+                <table class="input-table">
+                    <tr>
+                        <td class="text-box">
+                            <input type="text" size="40" name="message" id="message" autocomplete="off"
+                                placeholder="Please wait... loading...">
+                        </td>
+                        <td class="send-button">
+                            <input type="submit" value="Send" onclick="sendMessage()">
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
+
+    </div>
+
+
+
+</body>

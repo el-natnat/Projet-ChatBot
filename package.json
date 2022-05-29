@@ -19,6 +19,7 @@
   "homepage": "https://github.com/flguerin/ServiceWebProjet#readme",
   "dependencies": {
     "express": "^4.17.3",
+    "lowdb": "^3.0.0",
     "rivescript": "^2.2.0"
   }
 }
