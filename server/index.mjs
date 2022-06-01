@@ -26,14 +26,14 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) 
 
 // Create the bot.
-var script = new RiveScript();
-script.loadDirectory('./brain').then(success_handler(script)).catch(error_handler);
+var bot = new RiveScript();
+bot.loadDirectory('./brain').then(success_handler(bot)).catch(error_handler);
 
 
 
-function success_handler(script) {
+function success_handler(bot) {
   console.log('Brain loaded!');
-  script.sortReplies();
+  bot.sortReplies();
 
   /*// Set up the Express app.
   var app = express();*/
@@ -76,17 +76,18 @@ function getReply(req, res) {
 	if (typeof vars !== 'undefined') {
 	  for (var key in vars) {
 		if (vars.hasOwnProperty(key)) {
-		  script.setUservar(username, key, vars[key]);
+		  bot.setUservar(username, key, vars[key]);
 		}
 	  }
 	}
-  
+	bot.sortReplies();
+	
 	// Get a reply from the bot.
-	script
+	bot
 	  .reply(username, message, this)
 	  .then(function (reply) {
 		// Get all the user's vars back out of the script to include in the response.
-		vars = script.getUservars(username);
+		vars = bot.getUservars(username);
   
 		// Send the JSON response.
 		console.log("normalement c'est bon")
@@ -144,12 +145,12 @@ app.get('/', (req, res)=>{
 	}
 });
 
-app.post('/reply', (req, res)=>{
+/*app.post('/reply', (req, res)=>{
 	//let body = req.body;
 	console.log("là ?");
 	res.status(200).json(["toto"]);
 
-});
+});*/
 
 //End point to get a bot
 app.get('/:idd', (req, res)=>{
