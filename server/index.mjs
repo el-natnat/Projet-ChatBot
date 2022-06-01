@@ -24,14 +24,20 @@ const port = 3001
 
 app.use(bodyParser.json()) 
 app.use(bodyParser.urlencoded({ extended: true })) 
-
-// Create the bot.
 var bot = new RiveScript();
-bot.loadDirectory('./brain').then(success_handler(bot)).catch(error_handler);
+
+function create_bot(cerveau, name){
+	// Create the bot.
+	
+	bot.loadFile('./brain/cerveau1.rive').then(success_handler).catch(error_handler);
+	//bot.loadFile('./brain/'+{cerveau}+'.rive').then(success_handler()).catch(error_handler);
+
+}
 
 
 
-function success_handler(bot) {
+
+function success_handler() {
   console.log('Brain loaded!');
   bot.sortReplies();
 
@@ -80,8 +86,7 @@ function getReply(req, res) {
 		}
 	  }
 	}
-	bot.sortReplies();
-	
+
 	// Get a reply from the bot.
 	bot
 	  .reply(username, message, this)
@@ -291,6 +296,8 @@ BotService.create().then(ts=>{
 	BotServiceInstance=ts;
 	/*BotServiceInstance
 		.catch((err)=>{console.log(err);});*/
+	
+	create_bot("cerveau1", "truc");
 	app.listen(port, () => {
   		console.log(`Example app listening at http://localhost:${port}`)
 	});
