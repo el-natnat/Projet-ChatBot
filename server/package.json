@@ -16,6 +16,7 @@
     "lowdb": "^3.0.0",
     "node-fetch": "^3.2.3",
     "nodemon": "^2.0.7",
-    "rivescript": "^2.2.0"
+    "rivescript": "^2.2.0",
+    "type": "module"
   }
 }

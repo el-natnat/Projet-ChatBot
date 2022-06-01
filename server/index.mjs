@@ -6,7 +6,7 @@ import RiveScript from 'rivescript';
 
 import {Bot} from "./model/Bot.mjs";
 import {BotService} from "./model/BotService.mjs";
-let BotServiceInstance;
+let BotServiceInstance;	
 
 //import {PersonIdentifier,PersonService} from "./model/Persons.mjs";
 //let personServiceAccessPoint = new PersonService({url:"http://localhost",port:3001});

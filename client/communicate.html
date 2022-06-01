@@ -7,6 +7,128 @@
   <title>Accueil</title>
   <link rel="stylesheet" type="text/css" href="style.css">
 
+
+  <script>
+    document.addEventListener('DOMContentLoaded', init);
+
+
+    function init() {
+      listeDeroulanteBot = document.getElementById("bot-select");
+      boutonEnvoyer = document.getElementById("envoyer");
+      message = document.getElementById("envoyer_message");
+
+
+
+
+      boutonEnvoyer.addEventListener("click", envoyerMessage);
+      reloadListDeroulante();
+
+    }
+
+    function reloadListDeroulante() {
+
+      /*Suppression des anciens bots
+      while (bot in listeDeroulanteBot) { 
+        listeDeroulanteBot.removeChild(listeDeroulanteBot.firstChild);
+      }*/
+
+      let myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
+
+      let myInit = {
+        method: 'GET',
+        headers: myHeaders,
+        mode: 'cors',
+        cache: 'default'
+      };
+
+      let myURL = "http://localhost:3001/";
+
+
+      fetch(myURL, myInit)
+        .then((httpResponse) => {
+          return httpResponse.json()
+        })
+        .then((setOfBots) => { //La requête GET renvoie un setOfBots
+          for (let bot of setOfBots) {
+            //listeDeroulanteBot.append("bot"); //On ajoute les Bots à listeDeroulanteBot avec innerHTML
+            console.log(bot);
+            listeDeroulanteBot.innerHTML = listeDeroulanteBot.innerHTML + `<option id="${bot.id}"> Bot n°${bot.id} - ${bot.title} </option>`;
+          }
+        })
+        .catch((err) => {
+          console.log(`ERROR : ${err}`);
+        })
+
+
+    }
+
+    function envoyerMessage() {
+
+      var x = listeDeroulanteBot.selectedIndex;
+      var y = listeDeroulanteBot.options;
+
+      console.log("Index: " + y[x].index + " is " + y[x].text);
+      idBot = (listeDeroulanteBot.options[listeDeroulanteBot.selectedIndex]).getAttribute('id');
+      console.log(idBot);
+
+      if (idBot != null) {
+        console.log("Communication lancée");
+        console.log(message);
+        console.log(message.value); 
+
+        //When pushing the Send button
+
+        let myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+
+        let payload = {
+          username: "localuser", //Celui qui parle au bot
+          message: message
+
+        };
+        let myBody = JSON.stringify(payload);
+        let myInit = {
+          method: 'POST',
+          headers: myHeaders,
+          mode: 'cors',
+          cache: 'default',
+          body: myBody
+        };
+        let myURL = "http://localhost:3001/reply"; //URL du serveur qui va être lancé
+
+        
+
+
+        //launch the request
+        fetch(myURL, myInit)
+          .then((httpResponse) => {
+            return httpResponse.text();
+          })
+          .then((responseBody) => {
+            //reloadList();
+            //clear fields
+            inputTitle.value = "";
+            inputBrain.value = "";
+            console.log(`response is ${responseBody}`);
+          })
+          .catch((err) => {
+            console.log(`ERROR : ${err}`);
+          })
+
+        console.log("Requête POST envoyée avec succès");
+        console.log(`Le message "${message.value}" a été envoyé dans la requête post au Bot "" `);
+
+        
+      }
+
+
+    }
+
+  </script>
+
+
+
 </head>
 
 <body>
@@ -20,6 +142,25 @@
       <li><a href="./communicate.html">Communiquer avec les Bots</a></li>
     </ul>
   </nav>
+  <label for="bot-select">Choisir un bot:</label>
+
+  <select name="bots" id="bot-select">
+    <option value="">--Please choose an option--</option>
+
+  </select>
+
+  <div class="chat">
+
+    <div class="messages"></div>
+    <div id="edge"></div>
+
+    <input id="envoyer_message" type="text" placeholder="Votre message">
+    <input class="envoyer" id="envoyer" type="button" value="Envoyer">
+
+  </div>
+
+
+
 
 </body>
 

@@ -4,7 +4,7 @@
 <head>
     <link rel="stylesheet" href="style.css" />
 
-
+    <title>Administration des Bots</title>
     <script>
         document.addEventListener('DOMContentLoaded', init);
 
@@ -233,52 +233,7 @@
 
         }
 
-        function sendMessage() { //When pushing the Send button
 
-            let myHeaders = new Headers();
-            myHeaders.append('Content-Type', 'application/json');
-
-            let payload = {
-                username: 11862,
-                message: message.value
-
-            };
-            let myBody = JSON.stringify(payload);
-            let myInit = {
-                method: 'POST',
-                headers: myHeaders,
-                mode: 'cors',
-                cache: 'default',
-                body: myBody
-            };
-            let myURL = "http://localhost:3001/reply"; //URL du serveur qui va être lancé
-
-            console.log(message);
-            console.log(message.value);
-
-
-            //launch the request
-            fetch(myURL, myInit)
-                .then((httpResponse) => {
-                    return httpResponse.text();
-                })
-                .then((responseBody) => {
-                    //reloadList();
-                    //clear fields
-                    inputTitle.value = "";
-                    inputBrain.value = "";
-                    console.log(`response is ${responseBody}`);
-                })
-                .catch((err) => {
-                    console.log(`ERROR : ${err}`);
-                })
-
-            console.log("Requête POST envoyée avec succès");
-            console.log(`Le message "${message.value}" a été envoyé dans la requête post au Bot "" `);
-
-            let modal = document.getElementById("CommunicateChatBotModal");
-            modal.style.display = "none";
-        }
 
     </script>
 
