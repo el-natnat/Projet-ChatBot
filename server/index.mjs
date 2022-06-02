@@ -29,7 +29,7 @@ var bot = new RiveScript();
 function create_bot(cerveau, name){
 	// Create the bot.
 	
-	bot.loadFile('./brain/cerveau1.rive').then(success_handler).catch(error_handler);
+	bot.loadFile('./server/brain/cerveau1.rive').then(success_handler).catch(error_handler);
 	//bot.loadFile('./brain/'+{cerveau}+'.rive').then(success_handler()).catch(error_handler);
 
 }
@@ -97,10 +97,10 @@ function getReply(req, res) {
 		// Send the JSON response.
 		console.log("normalement c'est bon")
 		res.json({
-		  status: 'ok',
-		  reply: reply,
-		  vars: vars,
-		});
+			"status":"ok",
+			"reply":reply,
+			"vars":vars
+		 });
 	  })
 	  .catch(function (err) {
 		res.json({

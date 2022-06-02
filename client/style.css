@@ -17,3 +17,53 @@
     margin: auto;
     width: 50%;
 }
+
+
+
+.chat {
+    width: 400px;
+    height: 90%;
+    position: fixed;
+    overflow: scroll;
+
+    display: block;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 7px;
+
+}
+
+#envoyer_message {
+    height: 30px;
+    display: block;
+    width: 100%;
+    outline: 0;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+
+}
+#envoyer {
+   
+    display: block;
+    width: 50%;
+   
+    outline: 0;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+
+}
+
+.bot {
+    text-align: left;
+    margin-right: auto;
+    background: #001f3f;
+    color: white;
+}
+
+.self {
+    text-align: right;
+    margin-left: auto;
+    background: #DDD
+}

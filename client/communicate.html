@@ -16,6 +16,8 @@
       listeDeroulanteBot = document.getElementById("bot-select");
       boutonEnvoyer = document.getElementById("envoyer");
       message = document.getElementById("envoyer_message");
+      messageRecu = document.getElementById("conv");
+
 
 
 
@@ -74,8 +76,8 @@
 
       if (idBot != null) {
         console.log("Communication lancée");
-        console.log(message);
-        console.log(message.value); 
+     
+        console.log(message.value);
 
         //When pushing the Send button
 
@@ -84,7 +86,7 @@
 
         let payload = {
           username: "localuser", //Celui qui parle au bot
-          message: message
+          message: message.value
 
         };
         let myBody = JSON.stringify(payload);
@@ -97,7 +99,7 @@
         };
         let myURL = "http://localhost:3001/reply"; //URL du serveur qui va être lancé
 
-        
+
 
 
         //launch the request
@@ -108,9 +110,15 @@
           .then((responseBody) => {
             //reloadList();
             //clear fields
-            inputTitle.value = "";
-            inputBrain.value = "";
-            console.log(`response is ${responseBody}`);
+            
+           
+            var response = JSON.parse(responseBody)
+            console.log(response.status);
+          
+            
+            messageRecu.innerHTML = messageRecu.innerHTML + '<div class=self>' + message.value +'</div>'  
+            messageRecu.innerHTML = messageRecu.innerHTML + '<div class=bot>' + response.reply +'</div>'
+
           })
           .catch((err) => {
             console.log(`ERROR : ${err}`);
@@ -119,7 +127,7 @@
         console.log("Requête POST envoyée avec succès");
         console.log(`Le message "${message.value}" a été envoyé dans la requête post au Bot "" `);
 
-        
+
       }
 
 
@@ -151,7 +159,7 @@
 
   <div class="chat">
 
-    <div class="messages"></div>
+    <div id="conv"></div>
     <div id="edge"></div>
 
     <input id="envoyer_message" type="text" placeholder="Votre message">
