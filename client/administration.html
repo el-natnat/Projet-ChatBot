@@ -2,9 +2,16 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
 
     <title>Administration des Bots</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
     <script>
         document.addEventListener('DOMContentLoaded', init);
 
@@ -89,13 +96,11 @@
             talkBtn.addEventListener("click", () => { talkBot(bot.id) });
             item.appendChild(talkBtn);*/
 
-            let talkBtn = document.createElement("button");
-            talkBtn.innerHTML = "TALK";
-            talkBtn.setAttribute("onclick", `talkBot(${bot.id})`);
-            item.appendChild(talkBtn);
+
 
 
             item.innerHTML += ` ${bot.title}`;
+            item.innerHTML += ` (${bot.cerveau})`;
             return item;
         }
 
@@ -134,7 +139,9 @@
         }
 
 
-        function replaceBot(botId) {//A corriger
+        function replaceBot(botId) {//A corriger pour pouvoir changer de cerveau
+
+            deleteBot(botId)
             console.log(`replacing bot with Id ${botId}`);
 
             let modal = document.getElementById("replaceChatBotModal");
@@ -175,8 +182,15 @@
 
 
         function createNewChatBot() { //Fonction appelée lorsqu'on valide le nom du ChatBot et le cerveau ont été renseigné
+            
             console.log("Nouveau ChatBot créé");
+            console.log(inputBrain);
+            console.log(inputTitle.value); // Envoie le nom du ChatBot
+            console.log(inputBrain.id); // Envoie "cerveau1" ou "cerveau2"
+            console.log("Fin");
 
+            var cerveau_selec = document.querySelector('input[name="choix_cerveau"]:checked')
+            console.log(cerveau_selec.id);
             let modal = document.getElementById("newChatBotModal");
 
             modal.style.display = "none";
@@ -186,7 +200,7 @@
 
             let payload = {
                 title: inputTitle.value,
-                cerveau: inputBrain.id
+                cerveau: cerveau_selec.id
             };
             let myBody = JSON.stringify(payload);
             let myInit = {
@@ -198,8 +212,6 @@
             };
             let myURL = "http://localhost:3001/"; //URL du serveur qui va être lancé
 
-            console.log(inputTitle.value); // Envoie le titre
-            console.log(inputBrain.id); // Envoie "cerveau1" ou "cerveau2"
 
 
             //launch the request
@@ -211,7 +223,7 @@
                     reloadList();
                     //clear fields
                     inputTitle.value = "";
-                    inputBrain.value = "";
+                    inputBrain.id = "";
                     console.log(`response is ${responseBody}`);
                 })
                 .catch((err) => {
@@ -222,16 +234,16 @@
         }
 
 
-        function talkBot(botId) {//Talk with the bot
-            //Fonction appelée lorsqu'on appuie sur TALK
-            console.log(`Lancement de la conversion avec le bot ${botId}`);
-
-            let modal = document.getElementById("CommunicateChatBotModal");
-
-            modal.style.display = "block";
-
-
-        }
+        /* function talkBot(botId) {//Talk with the bot
+             //Fonction appelée lorsqu'on appuie sur TALK
+             console.log(`Lancement de la conversion avec le bot ${botId}`);
+ 
+             let modal = document.getElementById("CommunicateChatBotModal");
+ 
+             modal.style.display = "block";
+ 
+ 
+         }*/
 
 
 
@@ -241,11 +253,10 @@
 
 <body>
     <h1> Interface d'administration des Bots</h1>
-
-    <nav>
-        <ul>
-            <li><a href="./administration.html">Gestion des Bots</a></li>
-            <li><a href="./communicate.html">Communiquer avec les Bots</a></li>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" href="./administration.html">Gestion des Bots</a></li>
+            <li><a class="nav-link" href="./communicate.html">Communiquer avec les Bots</a></li>
         </ul>
     </nav>
 
@@ -263,14 +274,14 @@
         <div class="modal-content">
             <h1>Create a new ChatBot</h1>
             <p>
-                <label for="inputTitle">Nom du ChatBot:</label>
-                <input type="text" id="inputTitle" name="title"></input>
+                <label for="inputTitle" x>Nom du ChatBot:</label>
+                <input type="text" id="inputTitle" name="title" ></input>
 
             </p>
 
             <p>
-                <label>Choix du cerveau: </label>
-                <input type="radio" name="choix_cerveau" id="cerveau1" autofocus checked />
+                <label>Choix du cerveau: (cerveau 1 est choisi par défaut)</label> <br>
+                <input type="radio" name="choix_cerveau" id="cerveau1" checked />
                 <label> Cerveau 1 </label> <br />
                 <input type="radio" name="choix_cerveau" id="cerveau2" />
                 <label> Cerveau 2 </label><br />
@@ -295,9 +306,9 @@
 
             <p>
                 <label>Choix du cerveau: </label>
-                <input type="radio" name="choix_cerveau" id="cerveau1" autofocus checked />
+                <input type="radio" name="choix_cerveau" id="cerveau1" checked />
                 <label> Cerveau 1 </label> <br />
-                <input type="radio" name="choix_cerveau" id="cerveau2" />
+                <input id="cerveau2" type="radio" name="choix_cerveau" />
                 <label> Cerveau 2 </label><br />
 
             </p>
@@ -308,11 +319,12 @@
     </div>
 
     <!-- Modal pour communiquer avec le bot-->
+    <!--
     <div id="CommunicateChatBotModal" class="modal">
 
         <div class="modal-content">
-            <!--<form onSubmit="sendMessage()"> -->
-            <!-- <form action="http://localhost:3001/reply"   onSubmit="sendMessage()"> 
+            <form onSubmit="sendMessage()"> 
+             <form action="http://localhost:3001/reply"   onSubmit="sendMessage()"> 
                 <fieldset>
                     <legend>Send a Message</legend>
 
@@ -328,7 +340,7 @@
                         </tr>
                     </table>
                 </fieldset>
-            </form> -->
+            </form> 
             <label>Bot numéro ${botId} </label>
             <fieldset>
                 <legend>Send a Message</legend>
@@ -347,7 +359,7 @@
             </fieldset>
         </div>
 
-    </div>
+    </div>-->
 
 
 

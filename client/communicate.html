@@ -3,9 +3,12 @@
 
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Accueil</title>
   <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
 
   <script>
@@ -17,10 +20,6 @@
       boutonEnvoyer = document.getElementById("envoyer");
       message = document.getElementById("envoyer_message");
       messageRecu = document.getElementById("conv");
-
-
-
-
 
       boutonEnvoyer.addEventListener("click", envoyerMessage);
       reloadListDeroulante();
@@ -76,7 +75,7 @@
 
       if (idBot != null) {
         console.log("Communication lancée");
-     
+
         console.log(message.value);
 
         //When pushing the Send button
@@ -110,14 +109,14 @@
           .then((responseBody) => {
             //reloadList();
             //clear fields
-            
-           
+
+
             var response = JSON.parse(responseBody)
             console.log(response.status);
-          
-            
-            messageRecu.innerHTML = messageRecu.innerHTML + '<div class=self>' + message.value +'</div>'  
-            messageRecu.innerHTML = messageRecu.innerHTML + '<div class=bot>' + response.reply +'</div>'
+
+
+            messageRecu.innerHTML = messageRecu.innerHTML + '<div class=self>' + message.value + '</div>'
+            messageRecu.innerHTML = messageRecu.innerHTML + '<div class=bot>' + response.reply + '</div>'
 
           })
           .catch((err) => {
@@ -133,6 +132,11 @@
 
     }
 
+    function changementCerveau()
+    {
+      console.log(cerveau1);
+    }
+
   </script>
 
 
@@ -144,10 +148,10 @@
     <h1>Communiquer avec les Bots</h1>
   </header>
 
-  <nav>
-    <ul>
-      <li><a href="./administration.html">Gestion des Bots</a></li>
-      <li><a href="./communicate.html">Communiquer avec les Bots</a></li>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item"><a class="nav-link" href="./administration.html">Gestion des Bots</a></li>
+      <li><a class="nav-link" href="./communicate.html">Communiquer avec les Bots</a></li>
     </ul>
   </nav>
   <label for="bot-select">Choisir un bot:</label>
@@ -160,7 +164,7 @@
   <div class="chat">
 
     <div id="conv"></div>
-    <div id="edge"></div>
+
 
     <input id="envoyer_message" type="text" placeholder="Votre message">
     <input class="envoyer" id="envoyer" type="button" value="Envoyer">
