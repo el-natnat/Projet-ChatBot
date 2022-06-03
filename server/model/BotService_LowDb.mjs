@@ -3,14 +3,14 @@ import {Low, JSONFile} from 'lowdb';
 
 
 class BotService{
-	constructor(botServiceAccessPoint){ 
+	constructor(){ 
 		this.db = {};
-		this.botServiceAccessPoint = botServiceAccessPoint; 
+		
 	}
 
 	static async create(botServiceAccessPoint){ 
-		const service = new BotService(botServiceAccessPoint);
-		const adapter = new JSONFile("./model/db.json");
+		const service = new BotService();
+		const adapter = new JSONFile("db.json");
 		service.db = new Low(adapter);
 		await service.db.read();
 		service.db.data = service.db.data || { bots: [] } //if db is null, create it.
@@ -19,6 +19,7 @@ class BotService{
 	}
 
 	async addBot(anObject){
+		console.log("Yeah")
 		let newBot;
 		try{
 			newBot = new Bot(anObject);
@@ -26,7 +27,10 @@ class BotService{
 			throw err; //throwing an error inside a Promise
 		}
 		this.db.data.bots.push(newBot);
+		await this.db.write();
+		console.log("Fin")
 		return `added bot of id ${newBot.id}`;
+		
 	}
 
 	//from PUT

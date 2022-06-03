@@ -5,7 +5,7 @@ import cors from 'cors';
 import RiveScript from 'rivescript';
 
 import {Bot} from "./model/Bot.mjs";
-import {BotService} from "./model/BotService.mjs";
+import {BotService} from "./model/BotService_LowDb.mjs";
 let BotServiceInstance;	
 
 //import {PersonIdentifier,PersonService} from "./model/Persons.mjs";

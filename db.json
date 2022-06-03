@@ -1,0 +1,9 @@
+{
+  "bots": [
+    {
+      "id": 57225,
+      "title": "ChatBot 1 ",
+      "cerveau": "cerveau1"
+    }
+  ]
+}
