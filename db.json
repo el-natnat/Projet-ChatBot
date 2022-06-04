@@ -4,6 +4,11 @@
       "id": 24854,
       "title": "CHatBot 1",
       "cerveau": "cerveau1"
+    },
+    {
+      "id": 83377,
+      "title": "Chatbot 2",
+      "cerveau": "cerveau2"
     }
   ]
 }

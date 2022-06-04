@@ -4,9 +4,44 @@ import cors from 'cors';
 
 import RiveScript from 'rivescript';
 
-import {Bot} from "./model/Bot.mjs";
-import {BotService} from "./model/BotService_LowDb.mjs";
-let BotServiceInstance;	
+
+import { Bot } from "./model/Bot.mjs";
+import { BotService } from "./model/BotService_LowDb.mjs";
+
+
+/**
+ Partie Discord 
+ */
+import Discord from 'discord.js';
+const myIntents = new Discord.Intents();
+myIntents.add(Discord.Intents.FLAGS.GUILD_MESSAGES);
+myIntents.add(Discord.Intents.FLAGS.GUILDS);
+const client = new Discord.Client({ intents: myIntents });
+const token = "OTgyNzIyNDkwMDgwMDU5Mzky.GXT5O0.O84aMKI0if37OdEAl3RWsH7HMoNBMAlSaIXmow";
+client.login(token);
+
+client.once('ready', () => {
+	console.log("Le bot Discord a été correctement initialisé !");
+	client.user.setPresence({
+		activities: [{
+			name:"Je chatte avec toi ;)"
+		}],
+		status: "dnd"
+	});
+});
+
+client.on("messageCreate", async message => {
+	console.log("Message reçu");
+	if (message.content === "!ping") {
+		message.channel.send("Pong.")
+	}
+})
+/**
+ Fin partie Discord* 
+ */
+
+
+let BotServiceInstance;
 
 //import {PersonIdentifier,PersonService} from "./model/Persons.mjs";
 //let personServiceAccessPoint = new PersonService({url:"http://localhost",port:3001});
@@ -22,13 +57,13 @@ app.use(cors())
 
 const port = 3001
 
-app.use(bodyParser.json()) 
-app.use(bodyParser.urlencoded({ extended: true })) 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 var bot = new RiveScript();
 
-function create_bot(cerveau, name){
+function create_bot(cerveau, name) {
 	// Create the bot.
-	
+
 	bot.loadFile('./server/brain/cerveau1.rive').then(success_handler).catch(error_handler);
 	//bot.loadFile('./brain/'+{cerveau}+'.rive').then(success_handler()).catch(error_handler);
 
@@ -38,29 +73,29 @@ function create_bot(cerveau, name){
 
 
 function success_handler() {
-  console.log('Brain loaded!');
-  bot.sortReplies();
+	console.log('Brain loaded!');
+	bot.sortReplies();
 
-  /*// Set up the Express app.
-  var app = express();*/
-  
-  // Parse application/json inputs.
-  app.use(bodyParser.json());
-  app.set('json spaces', 4);
-  
-  // Set up routes.
-  app.post('/reply', getReply);
-  
-  //app.get('*', showUsage);
-  
-  /*// Start listening.
-  app.listen(3001, function () {
-     console.log('Listening on http://localhost:3001');
-  });*/
+	/*// Set up the Express app.
+	var app = express();*/
+
+	// Parse application/json inputs.
+	app.use(bodyParser.json());
+	app.set('json spaces', 4);
+
+	// Set up routes.
+	app.post('/reply', getReply);
+
+	//app.get('*', showUsage);
+
+	/*// Start listening.
+	app.listen(3001, function () {
+	   console.log('Listening on http://localhost:3001');
+	});*/
 }
-  
+
 function error_handler(loadcount, err) {
-  console.log('Error loading batch #' + loadcount + ': ' + err + '\n');
+	console.log('Error loading batch #' + loadcount + ': ' + err + '\n');
 }
 
 // POST to /reply to get a RiveScript reply.
@@ -71,53 +106,53 @@ function getReply(req, res) {
 	var username = req.body.username;
 	var message = req.body.message;
 	var vars = req.body.vars;
-  
+
 	// Make sure username and message are included.
 	if (typeof username === 'undefined' || typeof message === 'undefined') {
-	  console.log("Erreur username / message");
-	  return error(res, 'username and message are required keys');
+		console.log("Erreur username / message");
+		return error(res, 'username and message are required keys');
 	}
-	
+
 	// Copy any user vars from the post into RiveScript.
 	if (typeof vars !== 'undefined') {
-	  for (var key in vars) {
-		if (vars.hasOwnProperty(key)) {
-		  bot.setUservar(username, key, vars[key]);
+		for (var key in vars) {
+			if (vars.hasOwnProperty(key)) {
+				bot.setUservar(username, key, vars[key]);
+			}
 		}
-	  }
 	}
 
 	// Get a reply from the bot.
 	bot
-	  .reply(username, message, this)
-	  .then(function (reply) {
-		// Get all the user's vars back out of the script to include in the response.
-		vars = bot.getUservars(username);
-  
-		// Send the JSON response.
-		console.log("normalement c'est bon")
-		res.json({
-			"status":"ok",
-			"reply":reply,
-			"vars":vars
-		 });
-	  })
-	  .catch(function (err) {
-		res.json({
-		  status: 'error',
-		  error: err,
+		.reply(username, message, this)
+		.then(function (reply) {
+			// Get all the user's vars back out of the script to include in the response.
+			vars = bot.getUservars(username);
+
+			// Send the JSON response.
+			console.log("normalement c'est bon")
+			res.json({
+				"status": "ok",
+				"reply": reply,
+				"vars": vars
+			});
+		})
+		.catch(function (err) {
+			res.json({
+				status: 'error',
+				error: err,
+			});
 		});
-	  });
 }
 
 // All other routes shows the usage to test the /reply route.
 function showUsage(req, res) {
 	var egPayload = {
-	  username: 'soandso',
-	  message: 'Hello script',
-	  vars: {
-		name: 'Soandso',
-	  },
+		username: 'soandso',
+		message: 'Hello script',
+		vars: {
+			name: 'Soandso',
+		},
 	};
 	res.writeHead(200, { 'Content-Type': 'text/plain' });
 	res.write('Usage: curl -i \\\n');
@@ -126,25 +161,25 @@ function showUsage(req, res) {
 	res.write('   http://localhost:3001/reply');
 	res.end();
 }
-	
+
 // Send a JSON error to the browser.
 function error(res, message) {
 	res.json({
-	  status: 'error',
-	  message: message,
+		status: 'error',
+		message: message,
 	});
 }
 
 
-app.get('/', (req, res)=>{
-	try{
+app.get('/', (req, res) => {
+	try {
 		let myArrayOfBots;
-		if( undefined == (myArrayOfBots = BotServiceInstance.getBots() )){
+		if (undefined == (myArrayOfBots = BotServiceInstance.getBots())) {
 			throw new Error("No bots to get");
 		}
 		res.status(200).json(myArrayOfBots);
 	}
-	catch(err){
+	catch (err) {
 		console.log(`Error ${err} thrown... stack is : ${err.stack}`);
 		res.status(404).send('NOT FOUND');
 	}
@@ -158,43 +193,43 @@ app.get('/', (req, res)=>{
 });*/
 
 //End point to get a bot
-app.get('/:idd', (req, res)=>{
+app.get('/:idd', (req, res) => {
 	let id = req.params.idd;
-	if(!isInt(id)) {
+	if (!isInt(id)) {
 		//not the expected parameter
 		res.status(400).send('BAD REQUEST');
-	}else{
-		try{
+	} else {
+		try {
 			let myBot = BotServiceInstance.getBot(id);
 			res.status(200).json(myBot);
 		}
-		catch(err){
+		catch (err) {
 			console.log(`Error ${err} thrown... stack is : ${err.stack}`);
 			res.status(404).send('NOT FOUND');
 		}
 	}
 });
 
-app.delete('/:id',(req,res)=>{
-	
+app.delete('/:id', (req, res) => {
+
 	console.log(req.body);
 	let id = req.params.id;
 	console.log(id);
-	if(!isInt(id)) { 
+	if (!isInt(id)) {
 		//not the expected parameter
 		res.status(400).send('BAD REQUEST bad id');
-	}else{
+	} else {
 		BotServiceInstance
 			.removeBot(id)
-			.then((returnString)=>{
+			.then((returnString) => {
 				console.log(returnString);
 				res.status(201).send('All is OK');
 			})
-			.catch((err)=>{
+			.catch((err) => {
 				console.log(`Error ${err} thrown... stack is : ${err.stack}`);
 				res.status(400).send('BAD REQUEST ERROR');
-			});	
-	}	
+			});
+	}
 });
 
 /*
@@ -215,7 +250,7 @@ app.post('/v2/tasks/',(req,res)=>{
 */
 
 
-app.post('/',(req,res)=>{
+app.post('/', (req, res) => {
 	console.log('cachalot');
 	let theBotToAdd = req.body;
 	//let title = req.body.title;
@@ -223,23 +258,23 @@ app.post('/',(req,res)=>{
 
 	//let newbot=Bot.create(title,cerveau);
 	console.log(req.body);
-;
+	;
 	//console.log(newbot);
 	//creer_bot();
 	console.log('cachalot');
-	
+
 	/*res.status(201).send('All is OK');*/
 	BotServiceInstance
-		.addBot(theBotToAdd) 
-		.then((returnString)=>{
+		.addBot(theBotToAdd)
+		.then((returnString) => {
 			console.log(returnString);
-			
+
 			res.status(201).send(theBotToAdd);
 		})
-		.catch((err)=>{
+		.catch((err) => {
 			console.log(`Error ${err} thrown... stack is : ${err.stack}`);
 			res.status(400).send('BAD REQUEST');
-		});	
+		});
 });
 
 /*
@@ -292,14 +327,14 @@ let aTask ={ //UGLY
 	'assignement':randomPerson
 };*/
 
-BotService.create().then(ts=>{
-	BotServiceInstance=ts;
+BotService.create().then(ts => {
+	BotServiceInstance = ts;
 	/*BotServiceInstance
 		.catch((err)=>{console.log(err);});*/
-	
+
 	create_bot("cerveau1", "truc");
 	app.listen(port, () => {
-  		console.log(`Example app listening at http://localhost:${port}`)
+		console.log(`Example app listening at http://localhost:${port}`)
 	});
 });
 /*
@@ -315,8 +350,8 @@ async function getRandomPerson(){
 }*/
 
 function isInt(value) {
-  let x = parseFloat(value);
-  return !isNaN(value) && (x | 0) === x;
+	let x = parseFloat(value);
+	return !isNaN(value) && (x | 0) === x;
 }
 
 
