@@ -63,7 +63,10 @@
 
 
     }
+    function communiquerBot() {
+      
 
+    }
     function envoyerMessage() {
 
       var x = listeDeroulanteBot.selectedIndex;
@@ -114,10 +117,10 @@
             var response = JSON.parse(responseBody)
             console.log(response.status);
 
-
-            messageRecu.innerHTML = messageRecu.innerHTML + '<div class=self>' + message.value + '</div>'
-            messageRecu.innerHTML = messageRecu.innerHTML + '<div class=bot>' + response.reply + '</div>'
-
+            console.log(idBot);
+            messageRecu.innerHTML = messageRecu.innerHTML + `<div class=self id='${idBot}'>` + message.value + `</div>`
+            messageRecu.innerHTML = messageRecu.innerHTML + `<div  class=bot id='${idBot}' >` + response.reply + '</div>'
+            message.value = ""; //Vide le champ d'envoi
           })
           .catch((err) => {
             console.log(`ERROR : ${err}`);
@@ -129,13 +132,15 @@
 
       }
 
+      else {
+        alert("Veuillez sélectionner un Bot pour pouvoir communiquer");
+        console.log("Pas de bot sélectionné");
+      }
+
 
     }
 
-    function changementCerveau()
-    {
-      console.log(cerveau1);
-    }
+
 
   </script>
 
@@ -162,6 +167,7 @@
   </select>
 
   <div class="chat">
+    <label for="discussion">Discussion avec le Bot </label>
 
     <div id="conv"></div>
 
