@@ -1,8 +1,22 @@
+/**
+ * Documentation
+ * 
+ * 
+ * 
+ * 
+ */
+
+
 import {Bot} from "./Bot.mjs";
 import {Low, JSONFile} from 'lowdb';
 import fs from 'express'
 
 
+/**
+ *
+ *
+ * @class BotService
+ */
 class BotService{
 	constructor(){ 
 		this.db = {};
@@ -29,8 +43,8 @@ class BotService{
 		}
 		this.db.data.bots.push(newBot);
 		await this.db.write();
-		console.log("Fin")
-		return `added bot of id ${newBot.id}`;
+		console.log(`added bot of id ${newBot.id}`)
+		return newBot.id;
 		
 	}
 

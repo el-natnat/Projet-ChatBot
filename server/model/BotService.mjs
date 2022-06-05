@@ -1,6 +1,10 @@
 import {Bot} from "./Bot.mjs";
 
 
+/**
+ * @description classe du Bot en array
+ * @class BotService
+ */
 class BotService{
 	constructor(data){ 
 		this.array = new Array();
@@ -14,6 +18,7 @@ class BotService{
 	async addBot(anObject){
 		let newBot;
 		try{
+			console.log(anObject);
 			newBot = new Bot(anObject);
 		}catch(err){
 			throw err; //throwing an error inside a Promise

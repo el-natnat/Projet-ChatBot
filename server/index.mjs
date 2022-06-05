@@ -1,3 +1,9 @@
+
+/**
+ * 
+ * 
+ */
+
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -12,6 +18,7 @@ import { BotService } from "./model/BotService_LowDb.mjs";
 /**
  Partie Discord 
  */
+/*
 import Discord from 'discord.js';
 const myIntents = new Discord.Intents();
 myIntents.add(Discord.Intents.FLAGS.GUILD_MESSAGES);
@@ -36,6 +43,8 @@ client.on("messageCreate", async message => {
 		message.channel.send("Pong.")
 	}
 })
+
+*/
 /**
  Fin partie Discord* 
  */
@@ -63,17 +72,21 @@ var bot = new RiveScript();
 
 function create_bot(cerveau, name) {
 	// Create the bot.
-
-	bot.loadFile('./server/brain/cerveau1.rive').then(success_handler).catch(error_handler);
-	//bot.loadFile('./brain/'+{cerveau}+'.rive').then(success_handler()).catch(error_handler);
+	console.log(cerveau);
+	//bot.loadFile('./server/brain/cerveau1.rive').then(success_handler).catch(error_handler);
+	bot.loadFile('./brain/'+cerveau+'.rive').then(success_handler(name)).catch(error_handler);
 
 }
 
 
 
 
-function success_handler() {
+
+function success_handler(name) {
 	console.log('Brain loaded!');
+
+	console.log(name);
+	bot.setVariable("name", name);
 	bot.sortReplies();
 
 	/*// Set up the Express app.
@@ -98,7 +111,16 @@ function error_handler(loadcount, err) {
 	console.log('Error loading batch #' + loadcount + ': ' + err + '\n');
 }
 
+
+
 // POST to /reply to get a RiveScript reply.
+/**
+ *
+ *
+ * @param {*} req
+ * @param {*} res
+ * @return {*} 
+ */
 function getReply(req, res) {
 
 	console.log("Entree reply");
@@ -115,22 +137,29 @@ function getReply(req, res) {
 
 	// Copy any user vars from the post into RiveScript.
 	if (typeof vars !== 'undefined') {
+		console.log("recup vars");
 		for (var key in vars) {
 			if (vars.hasOwnProperty(key)) {
 				bot.setUservar(username, key, vars[key]);
 			}
 		}
 	}
-
+	
+	bot.sortReplies();//dangereux à mettre là mais erreur sinon
 	// Get a reply from the bot.
+
+	/*bot.reply(username, "Hello, bot!").then(function(reply) {
+		console.log("The bot says: " + reply);
+	  });
+	  */
 	bot
 		.reply(username, message, this)
 		.then(function (reply) {
 			// Get all the user's vars back out of the script to include in the response.
 			vars = bot.getUservars(username);
-
+			
 			// Send the JSON response.
-			console.log("normalement c'est bon")
+			console.log("normalement c'est bon");
 			res.json({
 				"status": "ok",
 				"reply": reply,
@@ -138,14 +167,22 @@ function getReply(req, res) {
 			});
 		})
 		.catch(function (err) {
+			console.log("merde");
 			res.json({
-				status: 'error',
+				status: 'error '+err.stack,
 				error: err,
 			});
 		});
 }
 
 // All other routes shows the usage to test the /reply route.
+
+/**
+ *
+ *
+ * @param {*} req
+ * @param {*} res
+ */
 function showUsage(req, res) {
 	var egPayload = {
 		username: 'soandso',
@@ -249,7 +286,7 @@ app.post('/v2/tasks/',(req,res)=>{
 });
 */
 
-
+//useless now
 app.post('/', (req, res) => {
 	console.log('cachalot');
 	let theBotToAdd = req.body;
@@ -332,8 +369,9 @@ BotService.create().then(ts => {
 	/*BotServiceInstance
 		.catch((err)=>{console.log(err);});*/
 	
-	BotServiceInstance.addBot("Steeve", "cerveau1").then(idBot=>{
+	BotServiceInstance.addBot({name:'Steeve', cerveau:'cerveau1'}).then(idBot=>{
 		let newBot=BotServiceInstance.getBot(idBot);
+		console.log(newBot.cerveau);
 		create_bot(newBot.cerveau, newBot.name);
 	});
 	
