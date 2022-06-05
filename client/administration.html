@@ -99,7 +99,7 @@
 
 
 
-            item.innerHTML += ` ${bot.title}`;
+            item.innerHTML += ` ${bot.name}`;
             item.innerHTML += ` (${bot.cerveau})`;
             return item;
         }
@@ -111,7 +111,7 @@
             let myHeaders = new Headers();
             myHeaders.append('Content-Type', 'application/json');
             let payload = {
-                title: inputTitle.value,
+                name: inputTitle.value,
                 cerveau: inputBrain.id
             };
             let myBody = JSON.stringify(payload);
@@ -152,7 +152,7 @@
             let myHeaders = new Headers();
             myHeaders.append('Content-Type', 'application/json');
             let payload = {
-                title: inputTitle.value,
+                name: inputTitle.value,
                 cerveau: inputBrain.id
             };
             let myBody = JSON.stringify(payload);
@@ -199,7 +199,7 @@
             myHeaders.append('Content-Type', 'application/json');
 
             let payload = {
-                title: inputTitle.value,
+                name: inputTitle.value,
                 cerveau: cerveau_selec.id
             };
             let myBody = JSON.stringify(payload);
@@ -275,7 +275,7 @@
             <h1>Create a new ChatBot</h1>
             <p>
                 <label for="inputTitle" x>Nom du ChatBot:</label>
-                <input type="text" id="inputTitle" name="title" ></input>
+                <input type="text" id="inputTitle" name="name" ></input>
 
             </p>
 
@@ -300,7 +300,7 @@
             <h1>Replace a new ChatBot</h1>
             <p>
                 <label for="inputTitle">Nom du ChatBot:</label>
-                <input type="text" id="inputTitle" name="title"></input>
+                <input type="text" id="inputTitle" name="name"></input>
 
             </p>
 
