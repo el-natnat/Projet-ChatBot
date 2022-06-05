@@ -54,7 +54,7 @@
           for (let bot of setOfBots) {
             //listeDeroulanteBot.append("bot"); //On ajoute les Bots à listeDeroulanteBot avec innerHTML
             console.log(bot);
-            listeDeroulanteBot.innerHTML = listeDeroulanteBot.innerHTML + `<option id="${bot.id}"> Bot n°${bot.id} - ${bot.name} </option>`;
+            listeDeroulanteBot.innerHTML = listeDeroulanteBot.innerHTML + `<option id="${bot.id}" name="${bot.name}"> Bot n°${bot.id} - ${bot.name} </option>`;
           }
         })
         .catch((err) => {
@@ -71,6 +71,8 @@
 
       console.log("Index: " + y[x].index + " is " + y[x].text);
       idBot = (listeDeroulanteBot.options[listeDeroulanteBot.selectedIndex]).getAttribute('id');
+      nomBot = (listeDeroulanteBot.options[listeDeroulanteBot.selectedIndex]).getAttribute('name');
+      console.log(nomBot);
       console.log(idBot);
 
       if (idBot != null) {
@@ -85,7 +87,8 @@
 
         let payload = {
           username: "localuser", //Celui qui parle au bot
-          message: message.value
+          message: message.value,
+          botname: nomBot
 
         };
         let myBody = JSON.stringify(payload);

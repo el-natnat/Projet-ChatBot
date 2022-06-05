@@ -70,11 +70,12 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 var bot = new RiveScript();
 
-function create_bot(cerveau, name) {
+function load_brain_bot(cerveau, name) {
 	// Create the bot.
 	console.log(cerveau);
+	console.log(name);
 	//bot.loadFile('./server/brain/cerveau1.rive').then(success_handler).catch(error_handler);
-	bot.loadFile('./brain/'+cerveau+'.rive').then(success_handler(name)).catch(error_handler);
+	bot.loadFile('./brain/'+cerveau+'.rive').then(success_handler()).catch(error_handler);
 
 }
 
@@ -82,11 +83,10 @@ function create_bot(cerveau, name) {
 
 
 
-function success_handler(name) {
+function success_handler() {
 	console.log('Brain loaded!');
 
-	console.log(name);
-	bot.setVariable("name", name);
+	
 	bot.sortReplies();
 
 	/*// Set up the Express app.
@@ -128,6 +128,7 @@ function getReply(req, res) {
 	var username = req.body.username;
 	var message = req.body.message;
 	var vars = req.body.vars;
+	var botname = req.body.botname;
 
 	// Make sure username and message are included.
 	if (typeof username === 'undefined' || typeof message === 'undefined') {
@@ -148,6 +149,7 @@ function getReply(req, res) {
 	bot.sortReplies();//dangereux à mettre là mais erreur sinon
 	// Get a reply from the bot.
 
+	bot.setVariable("name", botname);
 	/*bot.reply(username, "Hello, bot!").then(function(reply) {
 		console.log("The bot says: " + reply);
 	  });
@@ -372,7 +374,9 @@ BotService.create().then(ts => {
 	BotServiceInstance.addBot({name:'Steeve', cerveau:'cerveau1'}).then(idBot=>{
 		let newBot=BotServiceInstance.getBot(idBot);
 		console.log(newBot.cerveau);
-		create_bot(newBot.cerveau, newBot.name);
+		load_brain_bot(newBot.cerveau, newBot.name);
+
+	
 	});
 	
 	app.listen(port, () => {
