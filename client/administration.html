@@ -19,12 +19,16 @@
 
         function init() {
 
+            document.getElementById("tokenDiscord").style.display = "none";
+
             ChatBotListElt = document.getElementById("ChatBotListUL");
             reloadList();
 
             modal = document.getElementById("newChatBotModal");
             inputTitle = document.getElementById("inputTitle");
             inputBrain = document.querySelector('input[name="choix_cerveau"]:checked');
+            boxDiscord = document.getElementById("discord");
+            boxDiscord.addEventListener("click", () => afficher());
 
 
 
@@ -179,14 +183,34 @@
                 })
         }
 
+        function afficher() {
+            if (boxDiscord.checked) {
+                document.getElementById("tokenDiscord").style.display = "block";
 
+            }
+            else {
+                document.getElementById("tokenDiscord").style.display = "none";
+            }
+            console.log("CLIQUER");
+        }
+        /*function afficher(div, affiche) {
+
+
+            if (affiche) {
+                document.getElementById(div).style.display = "block";
+            }
+            else {
+                document.getElementById(div).style.display = "none";
+            }
+        }*/
 
         function createNewChatBot() { //Fonction appelée lorsqu'on valide le nom du ChatBot et le cerveau ont été renseigné
-            
+
             console.log("Nouveau ChatBot créé");
             console.log(inputBrain);
             console.log(inputTitle.value); // Envoie le nom du ChatBot
             console.log(inputBrain.id); // Envoie "cerveau1" ou "cerveau2"
+            console.log(boxDiscord.checked);
             console.log("Fin");
 
             var cerveau_selec = document.querySelector('input[name="choix_cerveau"]:checked')
@@ -275,7 +299,7 @@
             <h1>Create a new ChatBot</h1>
             <p>
                 <label for="inputTitle" x>Nom du ChatBot:</label>
-                <input type="text" id="inputTitle" name="name" ></input>
+                <input type="text" id="inputTitle" name="name"></input>
 
             </p>
 
@@ -287,6 +311,16 @@
                 <label> Cerveau 2 </label><br />
 
             </p>
+            <p>
+                <label> Activer l'implémentation Discord : </label>
+                <input type="checkbox" id="discord" name="discord" checked> <br />
+
+            <div id="tokenDiscord" >
+                <label for="inputTitle">Token Discord:</label>
+                <input type="text" name="tokenDiscord"></input>
+            </div>
+            </p>
+
 
             <button id="addNewChatBotButton">Ajouter le ChatBot</button>
         </div>
@@ -312,6 +346,8 @@
                 <label> Cerveau 2 </label><br />
 
             </p>
+
+
             <!-- On réutilise le bouton addnewChatButton ??-->
             <button id="addNewChatBotButton">Remplacer le ChatBot</button>
         </div>

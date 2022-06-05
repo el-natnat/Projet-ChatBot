@@ -1,9 +1,3 @@
-
-/**
- * 
- * 
- */
-
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -15,39 +9,7 @@ import { Bot } from "./model/Bot.mjs";
 import { BotService } from "./model/BotService_LowDb.mjs";
 
 
-/**
- Partie Discord 
- */
-/*
-import Discord from 'discord.js';
-const myIntents = new Discord.Intents();
-myIntents.add(Discord.Intents.FLAGS.GUILD_MESSAGES);
-myIntents.add(Discord.Intents.FLAGS.GUILDS);
-const client = new Discord.Client({ intents: myIntents });
-const token = "OTgyNzIyNDkwMDgwMDU5Mzky.GXT5O0.O84aMKI0if37OdEAl3RWsH7HMoNBMAlSaIXmow";
-client.login(token);
 
-client.once('ready', () => {
-	console.log("Le bot Discord a été correctement initialisé !");
-	client.user.setPresence({
-		activities: [{
-			name:"Je chatte avec toi ;)"
-		}],
-		status: "dnd"
-	});
-});
-
-client.on("messageCreate", async message => {
-	console.log("Message reçu");
-	if (message.content === "!ping") {
-		message.channel.send("Pong.")
-	}
-})
-
-*/
-/**
- Fin partie Discord* 
- */
 
 
 let BotServiceInstance;
