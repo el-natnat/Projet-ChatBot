@@ -19,7 +19,7 @@ class BotService{
 			throw err; //throwing an error inside a Promise
 		}
 		this.array.push(newBot);
-		return `added bot of id ${newBot.id}`;
+		return newBot.id;
 	}
 
 	//from PUT

@@ -331,8 +331,12 @@ BotService.create().then(ts => {
 	BotServiceInstance = ts;
 	/*BotServiceInstance
 		.catch((err)=>{console.log(err);});*/
-
-	create_bot("cerveau1", "truc");
+	
+	BotServiceInstance.addBot("Steeve", "cerveau1").then(idBot=>{
+		let newBot=BotServiceInstance.getBot(idBot);
+		create_bot(newBot.cerveau, newBot.name);
+	});
+	
 	app.listen(port, () => {
 		console.log(`Example app listening at http://localhost:${port}`)
 	});

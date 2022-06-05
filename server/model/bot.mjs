@@ -3,10 +3,10 @@ import {PersonIdentifier} from "./Persons.mjs";
 class Bot{
 
   static id = this.id;
-  static title = this.title;
+  static name = this.name;
   static cerveau  = this.cerveau;
 
-  constructor(data){   //id,title,comment,tags
+  constructor(data){   //id,name,cerveau
     if(undefined != data.id) {
       if(!isInt(data.id)){
         throw new Error("Task Creation : passed Id is not an integer");
@@ -15,13 +15,13 @@ class Bot{
     } else {
       this.id = parseInt(    Math.floor(Math.random() * Math.floor(100000))     );
     }
-    if(undefined != data.title) {
-      if(!isString(data.title)){
-        throw new Error("Bot Creation : passed Title is not a string");
+    if(undefined != data.name) {
+      if(!isString(data.name)){
+        throw new Error("Bot Creation : passed name is not a string");
       }
-      this.title = data.title;
+      this.name = data.name;
     } else {
-      this.title = "";
+      this.name = "";
     }
     if(undefined != data.cerveau) {
       if(!isString(data.cerveau)){
@@ -34,8 +34,8 @@ class Bot{
 
   }
   
-  static async create(title, cerveau){ 
-    return new Bot(title, cerveau);
+  static async create(name, cerveau){ 
+    return new Bot(name, cerveau);
   }
   static isBot(anObject){
     // check if mandatory fields are there
