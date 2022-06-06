@@ -8,6 +8,67 @@ import RiveScript from 'rivescript';
 import { Bot } from "./model/Bot.mjs";
 import { BotService } from "./model/BotService_LowDb.mjs";
 
+/* Partie Discord */
+import Discord from 'discord.js';
+const myIntents = new Discord.Intents();
+myIntents.add(Discord.Intents.FLAGS.GUILD_MESSAGES);
+myIntents.add(Discord.Intents.FLAGS.GUILDS);
+const client = new Discord.Client({ intents: myIntents });
+const token = "OTgyNzIyNDkwMDgwMDU5Mzky.Gb1qqF.oHJb4SDGaTqgWJm9ysSKnBBYY7y4RswiQAEAJM";
+client.login(token);
+
+client.once('ready', () => {
+	console.log("Le bot Discord a été correctement initialisé !");
+	client.user.setPresence({
+		activities: [{
+			name: "Je chatte avec toi ;)"
+		}],
+		status: "dnd"
+	});
+});
+
+client.on("messageCreate", message => {
+	console.log("Message reçu");
+
+
+	let entry = message.content;
+	/*if (message.content === "!ping") {
+		message.channel.send("Pong.")
+		
+	}*/
+	var username = "local";
+	if (message.author.bot == false) { //Si message n'est pas un message d'un bot
+		
+
+		console.log(message);
+
+		bot.sortReplies();//dangereux à mettre là mais erreur sinon
+		// Get a reply from the bot.
+
+		bot.setVariable("master", message.author.username);
+		bot.setVariable("name", "botname");
+		/*bot.reply(username, "Hello, bot!").then(function(reply) {
+			console.log("The bot says: " + reply);
+		  });
+		  */
+		bot
+			.reply(username, message.content, this)
+
+			.then(function (reply) {
+				console.log("Works");
+
+				var output = reply;
+				if (output != "ERR: No Reply Matched") {
+					message.channel.send(output)
+				}
+				else {
+					message.channel.send("Oups")
+				}
+			});
+	}
+
+})
+
 
 
 
@@ -37,7 +98,7 @@ function load_brain_bot(cerveau, name) {
 	console.log(cerveau);
 	console.log(name);
 	//bot.loadFile('./server/brain/cerveau1.rive').then(success_handler).catch(error_handler);
-	bot.loadFile('./brain/'+cerveau+'.rive').then(success_handler()).catch(error_handler);
+	bot.loadFile('./brain/' + cerveau + '.rive').then(success_handler()).catch(error_handler);
 
 }
 
@@ -48,7 +109,7 @@ function load_brain_bot(cerveau, name) {
 function success_handler() {
 	console.log('Brain loaded!');
 
-	
+
 	bot.sortReplies();
 
 	/*// Set up the Express app.
@@ -107,7 +168,7 @@ function getReply(req, res) {
 			}
 		}
 	}
-	
+
 	bot.sortReplies();//dangereux à mettre là mais erreur sinon
 	// Get a reply from the bot.
 
@@ -121,7 +182,7 @@ function getReply(req, res) {
 		.then(function (reply) {
 			// Get all the user's vars back out of the script to include in the response.
 			vars = bot.getUservars(username);
-			
+
 			// Send the JSON response.
 			console.log("normalement c'est bon");
 			res.json({
@@ -133,7 +194,7 @@ function getReply(req, res) {
 		.catch(function (err) {
 			console.log("merde");
 			res.json({
-				status: 'error '+err.stack,
+				status: 'error ' + err.stack,
 				error: err,
 			});
 		});
@@ -332,15 +393,15 @@ BotService.create().then(ts => {
 	BotServiceInstance = ts;
 	/*BotServiceInstance
 		.catch((err)=>{console.log(err);});*/
-	
-	BotServiceInstance.addBot({name:'Steeve', cerveau:'cerveau1'}).then(idBot=>{
-		let newBot=BotServiceInstance.getBot(idBot);
+
+	BotServiceInstance.addBot({ name: 'Steeve', cerveau: 'cerveau1' }).then(idBot => {
+		let newBot = BotServiceInstance.getBot(idBot);
 		console.log(newBot.cerveau);
 		load_brain_bot(newBot.cerveau, newBot.name);
 
-	
+
 	});
-	
+
 	app.listen(port, () => {
 		console.log(`Example app listening at http://localhost:${port}`)
 	});
