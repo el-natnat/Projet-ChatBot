@@ -19,7 +19,7 @@
 
         function init() {
 
-            document.getElementById("tokenDiscord").style.display = "none";
+            document.getElementById("tokenDiv").style.display = "none";
 
             ChatBotListElt = document.getElementById("ChatBotListUL");
             reloadList();
@@ -29,6 +29,8 @@
             inputBrain = document.querySelector('input[name="choix_cerveau"]:checked');
             boxDiscord = document.getElementById("discord");
             boxDiscord.addEventListener("click", () => afficher());
+            tokenDiscord = document.getElementById("tokenDiscord");
+
 
 
 
@@ -185,11 +187,11 @@
 
         function afficher() {
             if (boxDiscord.checked) {
-                document.getElementById("tokenDiscord").style.display = "block";
+                document.getElementById("tokenDiv").style.display = "block";
 
             }
             else {
-                document.getElementById("tokenDiscord").style.display = "none";
+                document.getElementById("tokenDiv").style.display = "none";
             }
             console.log("CLIQUER");
         }
@@ -212,6 +214,7 @@
             console.log(inputBrain.id); // Envoie "cerveau1" ou "cerveau2"
             console.log(boxDiscord.checked);
             console.log("Fin");
+            console.log(tokenDiscord);
 
             var cerveau_selec = document.querySelector('input[name="choix_cerveau"]:checked')
             console.log(cerveau_selec.id);
@@ -225,7 +228,8 @@
             let payload = {
                 name: inputTitle.value,
                 cerveau: cerveau_selec.id,
-                
+                discord: boxDiscord.checked,
+                token: tokenDiscord.value
                 
             };
             let myBody = JSON.stringify(payload);
@@ -249,7 +253,7 @@
                     reloadList();
                     //clear fields
                     inputTitle.value = "";
-                    inputBrain.id = "";
+                    
                     console.log(`response is ${responseBody}`);
                 })
                 .catch((err) => {
@@ -257,7 +261,6 @@
                 })
 
             console.log("Requête POST envoyée avec succès");
-            console.log(boxDiscord);
         }
 
 
@@ -308,19 +311,19 @@
 
             <p>
                 <label>Choix du cerveau: (cerveau 1 est choisi par défaut)</label> <br>
-                <input type="radio" name="choix_cerveau" id="cerveau1" checked />
+                <input id="cerveau1" type="radio" name="choix_cerveau"  />
                 <label> Cerveau 1 </label> <br />
-                <input type="radio" name="choix_cerveau" id="cerveau2" />
+                <input  id="cerveau2" type="radio" name="choix_cerveau" />
                 <label> Cerveau 2 </label><br />
 
             </p>
             <p>
                 <label> Activer l'implémentation Discord : </label>
-                <input type="checkbox" id="discord" name="discord" checked> <br />
+                <input type="checkbox" id="discord" name="discord"> <br />
 
-            <div id="tokenDiscord" >
-                <label for="inputTitle">Token Discord:</label>
-                <input type="text" name="tokenDiscord"></input>
+            <div id="tokenDiv" >
+                <label for="inputDiscord">Token Discord:</label>
+                <input type="text" id="tokenDiscord" name="tokenDiscord" ></input>
             </div>
             </p>
 

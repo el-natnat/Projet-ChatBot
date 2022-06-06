@@ -14,8 +14,7 @@ const myIntents = new Discord.Intents();
 myIntents.add(Discord.Intents.FLAGS.GUILD_MESSAGES);
 myIntents.add(Discord.Intents.FLAGS.GUILDS);
 const client = new Discord.Client({ intents: myIntents });
-const token = "OTgyNzIyNDkwMDgwMDU5Mzky.Gb1qqF.oHJb4SDGaTqgWJm9ysSKnBBYY7y4RswiQAEAJM";
-client.login(token);
+
 
 client.once('ready', () => {
 	console.log("Le bot Discord a été correctement initialisé !");
@@ -38,7 +37,7 @@ client.on("messageCreate", message => {
 	}*/
 	var username = "local";
 	if (message.author.bot == false) { //Si message n'est pas un message d'un bot
-		
+
 
 		console.log(message);
 
@@ -314,16 +313,29 @@ app.post('/v2/tasks/',(req,res)=>{
 //useless now
 app.post('/', (req, res) => {
 	console.log('cachalot');
+
 	let theBotToAdd = req.body;
 	//let title = req.body.title;
 	//let cerveau = req.body.cerveau;
 
 	//let newbot=Bot.create(title,cerveau);
-	console.log(req.body);
-	;
-	//console.log(newbot);
+	console.log(theBotToAdd);
+
+	console.log(theBotToAdd.token);
+
+	//console.log(newbot);.
 	//creer_bot();
 	console.log('cachalot');
+
+	if (theBotToAdd.discord == true) {
+		console.log("Didi");
+		try {
+			client.login(theBotToAdd.token);
+		} catch (error) {
+			console.log("az");
+			console.error(error);
+		}
+	}
 
 	/*res.status(201).send('All is OK');*/
 	BotServiceInstance
