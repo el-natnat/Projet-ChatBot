@@ -10,6 +10,13 @@ import { BotService } from "./model/BotService_LowDb.mjs";
 
 /* Partie Discord */
 import Discord from 'discord.js';
+
+/* Empêche les crashs */
+process.on('uncaughtException', function (err) {
+	console.error(err);
+	console.log("Node NOT Exiting...");
+  });
+
 const myIntents = new Discord.Intents();
 myIntents.add(Discord.Intents.FLAGS.GUILD_MESSAGES);
 myIntents.add(Discord.Intents.FLAGS.GUILDS);
@@ -35,13 +42,13 @@ client.on("messageCreate", message => {
 		message.channel.send("Pong.")
 		
 	}*/
-	var username = "local";
+	
 	if (message.author.bot == false) { //Si message n'est pas un message d'un bot
 
 
 		console.log(message);
 
-		bot.sortReplies();//dangereux à mettre là mais erreur sinon
+		bot.sortReplies();
 		// Get a reply from the bot.
 
 		bot.setVariable("master", message.author.username);

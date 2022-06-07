@@ -31,6 +31,19 @@ class Bot{
     } else {
       this.cerveau = "";
     }
+    if(undefined != data.discord) {
+      
+      this.discord = data.discord;
+    } 
+
+    if(undefined != data.token) {
+      if(!isString(data.token) && data.discord){
+        throw new Error("Bot Creation : passed token is not a string");
+      }
+      this.token = data.token;
+    } else {
+      this.token = "";
+    }
 
   }
   
