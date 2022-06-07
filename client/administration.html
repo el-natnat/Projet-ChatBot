@@ -22,6 +22,9 @@
             document.getElementById("tokenDiv").style.display = "none";
 
             ChatBotListElt = document.getElementById("ChatBotListUL");
+            boxDiscord = document.getElementById("discord");
+            boxDiscord.addEventListener("click", () => afficher());
+
             reloadList();
 
             modal = document.getElementById("newChatBotModal");
@@ -103,10 +106,10 @@
             item.innerHTML += ` ${bot.name}`;
             item.innerHTML += ` (${bot.cerveau})`;
 
-            if (bot.discord){
+            if (bot.discord) {
                 item.innerHTML += ` Discord activé`;
             }
-            
+
 
             return item;
         }
@@ -118,8 +121,7 @@
             let myHeaders = new Headers();
             myHeaders.append('Content-Type', 'application/json');
             let payload = {
-                name: inputTitle.value,
-                cerveau: inputBrain.id
+                //name: inputTitle.value,
             };
             let myBody = JSON.stringify(payload);
             let myInit = {
@@ -160,7 +162,9 @@
             myHeaders.append('Content-Type', 'application/json');
             let payload = {
                 name: inputTitle.value,
-                cerveau: inputBrain.id
+                cerveau: inputBrain.id,
+                discord: boxDiscord.checked,
+                token: tokenDiscord.value
             };
             let myBody = JSON.stringify(payload);
             let myInit = {
@@ -196,6 +200,7 @@
             }
             console.log("CLIQUER");
         }
+
         /*function afficher(div, affiche) {
 
 
@@ -212,8 +217,7 @@
 
             inputTitle = document.getElementById("inputTitle");
             //inputBrain = document.querySelector('input[name="choix_cerveau"]:checked');
-            boxDiscord = document.getElementById("discord");
-            boxDiscord.addEventListener("click", () => afficher());
+
             tokenDiscord = document.getElementById("tokenDiscord");
             var inputBrain = document.querySelector('input[name="choix_cerveau"]:checked')
 
@@ -268,6 +272,7 @@
                 })
 
             console.log("Requête POST envoyée avec succès");
+            afficher();
         }
 
 
