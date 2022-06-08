@@ -17,6 +17,7 @@
 
         let ChatBotListElt;
 
+        var idaremplacer=-1;
 
         
 
@@ -32,17 +33,23 @@
 
             modal = document.getElementById("newChatBotModal");
 
-
-
-
             newChatBotButton = document.getElementById("newChatBotButton");
             newChatBotButton.addEventListener("click", () => { modal.style.display = "block"; });
 
             addNewChatBotButton = document.getElementById("addNewChatBotButton");
             addNewChatBotButton.addEventListener("click", createNewChatBot);
 
+            replaceChatBotButton = document.getElementById("replaceChatBotButton");
+            replaceChatBotButton.addEventListener("click", callReplacement);
 
+            closeReplaceChatBot = document.getElementById("closeReplaceChatBot");
+            closeReplaceChatBot.addEventListener("click", annuler);
 
+        }
+
+        function annuler(){
+            document.getElementById('replaceChatBotModal').style.display='none';
+            //document.getElementById('addNewChatBotButton').style.display='none';
         }
 
         function reloadList() { //Recharge la liste des Bots lancés
@@ -108,6 +115,7 @@
 
             item.innerHTML += ` ${bot.name}`;
             item.innerHTML += ` (${bot.cerveau})`;
+            item.innerHTML += ` (${bot.id})`;
 
             if (bot.discord) {
                 item.innerHTML += ` Discord activé`;
@@ -153,18 +161,35 @@
 
         function replaceBot(botId) {//A corriger pour pouvoir changer de cerveau
 
-            deleteBot(botId)
-            console.log(`replacing bot with Id ${botId}`);
+            
+            console.log(`replacement of bot with Id ${botId}`);
 
             let modal = document.getElementById("replaceChatBotModal");
             modal.style.display = "block";
+            
+            idaremplacer=botId;
 
 
 
+        }
+
+        function callReplacement(){
+
+            console.log(`replacing bot with Id ${idaremplacer}`);
+            var inputBrain = document.querySelector('input[name="choix_cerveau"]:checked');
             let myHeaders = new Headers();
             myHeaders.append('Content-Type', 'application/json');
+        
+            let inputTitle2 = document.getElementById("inputTitle2");
+            tokenDiscord = document.getElementById("tokenDiscord");
+
+            console.log("tic");
+            console.log(inputTitle2.value);
+            console.log("tac");
+
             let payload = {
-                name: inputTitle.value,
+                id:idaremplacer,
+                name: inputTitle2.value,
                 cerveau: inputBrain.id,
                 discord: boxDiscord.checked,
                 token: tokenDiscord.value
@@ -177,7 +202,8 @@
                 cache: 'default',
                 body: myBody
             };
-            let myURL = "http://localhost:3001/";
+            let myURL = `http://localhost:3001/${idaremplacer}`;
+            console.log(myBody);
 
             //launch the request
             fetch(myURL, myInit)
@@ -192,6 +218,7 @@
                     console.log(`ERROR : ${err}`);
                 })
         }
+           
 
         function afficher() {
             if (boxDiscord.checked) {
@@ -357,11 +384,10 @@
         <div class="modal-content">
             <header>
                 <h1>Replace a new ChatBot</h1>
-                <span onclick="document.getElementById('replaceChatBotModal').style.display='none'"></span>
             </header>
             <p>
-                <label for="inputTitle">Nom du ChatBot:</label>
-                <input type="text" id="inputTitle" name="name"></input>
+                <label for="inputTitle2">Nom du ChatBot:</label>
+                <input type="text" id="inputTitle2" name="name"></input>
 
             </p>
 
@@ -376,7 +402,8 @@
 
 
             <!-- On réutilise le bouton addnewChatButton ??-->
-            <button id="addNewChatBotButton">Remplacer le ChatBot</button>
+            <button id="replaceChatBotButton">Remplacer le ChatBot</button> <br>
+            <button id="closeReplaceChatBot"> Annuler </button>
         </div>
 
     </div>

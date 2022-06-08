@@ -1,16 +1,37 @@
 {
   "bots": [
     {
-      "id": 38861,
+      "id": 68398,
       "name": "Steeve",
       "cerveau": "cerveau1",
       "discord": false,
       "token": ""
     },
     {
-      "id": 95890,
-      "name": "Marc",
-      "cerveau": "cerveau2",
+      "id": 52906,
+      "name": "Cachalot",
+      "cerveau": "cerveau1",
+      "discord": false,
+      "token": ""
+    },
+    {
+      "id": 37496,
+      "name": "Poulpi",
+      "cerveau": "cerveau1",
+      "discord": false,
+      "token": ""
+    },
+    {
+      "id": 55592,
+      "name": "Palpatine",
+      "cerveau": "cerveau1",
+      "discord": false,
+      "token": ""
+    },
+    {
+      "id": 4877,
+      "name": "Vador",
+      "cerveau": "cerveau1",
       "discord": false,
       "token": ""
     }

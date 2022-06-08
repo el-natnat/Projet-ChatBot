@@ -125,18 +125,26 @@ function load_brain_bot(cerveau, name) {
 
 }
 
-
+/**
+ *
+ * @description permet de mettre à jour un bot
+ * @param {*} req //requête reçue
+ * @param {*} res //réponse envoyée
+ * @return {*} 
+ */
 app.put('/:id',(req,res)=>{
 	let id = req.params.id;
-	if(!isInt(id)) { //Should I propagate a bad parameter to the model?
+	console.log(id);
+	if(!isInt(id)) { 
 		//not the expected parameter
 		res.status(400).send('BAD REQUEST');
 	}else{
 		
 		let newValues = req.body; //the client is responsible for formating its request with proper syntax.
-		//newValues.assignement = getRandomPerson();
+		console.log("put en cours");
 		console.log(newValues);
-		botServiceInstance
+
+		BotServiceInstance
 			.replaceBot(id, newValues)
 			.then((returnString)=>{
 				console.log(returnString);
@@ -150,7 +158,7 @@ app.put('/:id',(req,res)=>{
 });
 
 /**
- * @description fonction permettant de paramétrer le bot à partir du cerveau et préparer les 
+ * @description fonction permettant de paramétrer le bot à partir du cerveau et préparer les routes
  */
 function success_handler() {
 	console.log('Brain loaded!');
@@ -343,7 +351,7 @@ app.delete('/:id', (req, res) => {
 	}
 });
 
-//useless now
+
 /**
  *
  * @description permet d'ajouter un bot
@@ -352,27 +360,19 @@ app.delete('/:id', (req, res) => {
  * @return {*} 
  */
 app.post('/', (req, res) => {
-	console.log('cachalot');
+	
 
 	let theBotToAdd = req.body;
-	//let title = req.body.title;
-	//let cerveau = req.body.cerveau;
 
-	//let newbot=Bot.create(title,cerveau);
 	console.log(theBotToAdd);
 
 	console.log(theBotToAdd.token);
 
-	//console.log(newbot);.
-	//creer_bot();
-	console.log('cachalot');
 
 	if (theBotToAdd.discord == true) {
-		console.log("Didi");
 		try {
 			client.login(theBotToAdd.token);
 		} catch (error) {
-			console.log("az");
 			console.error(error);
 		}
 	}
@@ -392,59 +392,10 @@ app.post('/', (req, res) => {
 
 
 /**
- *
- * @description permet au bot de renvoyer une réponse
- * @param {*} req //requête reçue
- * @param {*} res //réponse envoyée
- * @return {*} 
- */
-function authentication(req, res, next) {
-    var authheader = req.headers.authorization;
-    console.log(req.headers);
- 
-    if (!authheader) {
-        var err = new Error('You are not authenticated!');
-        res.setHeader('WWW-Authenticate', 'Basic');
-        err.status = 401;
-        return next(err)
-    }
- 
-    var auth = new Buffer.from(authheader.split(' ')[1],
-    'base64').toString().split(':');
-    var user = auth[0];
-    var pass = auth[1];
- 
-    if (user == 'admin' && pass == 'password') {
- 
-        // If Authorized user
-        next();
-    } else {
-        var err = new Error('You are not authenticated!');
-        res.setHeader('WWW-Authenticate', 'Basic');
-        err.status = 401;
-        return next(err);
-    }
- 
-}
-// First step is the authentication of the client
-app.use(authentication)
-app.use(express.static(path.join(__dirname, 'client')));
-
-
-
-/**
  * Création du service de bot
  */
 BotService.create().then(ts => {
 	BotServiceInstance = ts;
-	/*BotServiceInstance
-		.catch((err)=>{console.log(err);});*/
-
-	/*BotServiceInstance.addBot({ name: 'Steeve', cerveau: 'cerveau1' }).then(idBot => {
-		let newBot = BotServiceInstance.getBot(idBot);
-		console.log(newBot.cerveau);
-		load_brain_bot(newBot.cerveau, newBot.name);
-	});*/
 
 	app.listen(port, () => {
 		console.log(`Example app listening at http://localhost:${port}`)

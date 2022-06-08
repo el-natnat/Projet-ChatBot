@@ -5,8 +5,10 @@ class Bot{
   static id = this.id;
   static name = this.name;
   static cerveau  = this.cerveau;
+  static discord = this.discord;
+  static token = this.token;
 
-  constructor(data){   //id,name,cerveau
+  constructor(data){   //id,name,cerveau, discord, token
     if(undefined != data.id) {
       if(!isInt(data.id)){
         throw new Error("Task Creation : passed Id is not an integer");
