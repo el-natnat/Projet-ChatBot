@@ -46,8 +46,7 @@
       chatavecbot.style.visibility = 'hidden';
       username.disabled=false;
       listeDeroulanteBot.disabled=false;
-      //boutonValider.style.visibility = 'visible';
-      //boutonRetour.style.visibility = 'hidden';
+      
       boutonRetour.disabled = true;
       boutonValider.disabled = false;
       console.log("retour");
@@ -94,10 +93,7 @@
     //recharge la liste des bots
     function reloadListDeroulante() {
 
-      /*Suppression des anciens bots
-      while (bot in listeDeroulanteBot) { 
-        listeDeroulanteBot.removeChild(listeDeroulanteBot.firstChild);
-      }*/
+      
 
       let myHeaders = new Headers();
       myHeaders.append('Content-Type', 'application/json');
@@ -295,7 +291,7 @@
   <label for="bot-select">Choisir un bot:</label>
 
   <select name="bots" id="bot-select" >
-    <option value="">--Please choose an option--</option>
+    <option value="">--Choisissez une option--</option>
     
   </select>
 

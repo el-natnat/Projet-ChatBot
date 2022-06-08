@@ -10,10 +10,9 @@ import { BotService } from "./model/BotService_LowDb.mjs";
 
 import fs from 'fs';
 import path from 'path';
-import {fileURLToPath} from 'url';
+import { fileURLToPath } from 'url';
 
 
-/* Partie Discord */
 import Discord from 'discord.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -24,25 +23,32 @@ console.log('directory-name ', __dirname);
 
 //console.log(path.join(__dirname, '/dist', 'index.html'));
 
-
-//import Discord from 'discord.js';
-/* Empêche les crashs */
-process.on('uncaughtException', function (err) {
-	console.error(err);
-	console.log("Node NOT Exiting...");
-  });
-
 const myIntents = new Discord.Intents();
 myIntents.add(Discord.Intents.FLAGS.GUILD_MESSAGES);
 myIntents.add(Discord.Intents.FLAGS.GUILDS);
 const client = new Discord.Client({ intents: myIntents });
 const client2 = new Discord.Client({ intents: myIntents });
 
+//import Discord from 'discord.js';
+/* Permet de gérer les exceptions de nodeJS */
+process.on('uncaughtException', function (err) {
+	console.error(err);
+	console.log("Node NOT Exiting...");
+});
+
+
+
+/**
+ * Exécution du client2 Discord une fois lancé
+ */
 
 client.once('ready', () => {
-	c1= cerveauCourant
+	console.log(nomBot);
+
+	c1 = cerveauCourant
 	bot.loadFile('./brain/' + c1 + '.rive').then(success_handler()).catch(error_handler);
 	console.log("Le bot Discord a été correctement initialisé !");
+	bot.setVariable("name", nomBot);
 	client.user.setPresence({
 		activities: [{
 			name: "Je chatte avec toi ;)"
@@ -50,119 +56,132 @@ client.once('ready', () => {
 		status: "dnd"
 	});
 });
-
+/**
+ * Comportement à la réception d'un message du client Discord 
+ */
 client.on("messageCreate", message => {
-	bot.loadFile('./brain/' + c1 + '.rive').then(success_handler()).catch(error_handler);
 
+	bot.loadFile('./brain/' + c1 + '.rive').then(success_handler()).catch(error_handler);
+	bot.setVariable("name", nomBot);
 	console.log("Message reçu");
-	
+
 	bot.sortReplies();
-	
+
 
 
 	let entry = message.content;
-	/*if (message.content === "!ping") {
-		message.channel.send("Pong.")
-		
-	}*/
+	if (message.content === "!kick1") {
+		client.destroy();
 
-	if (message.author.bot == false) { //Si message n'est pas un message d'un bot
+	}
+	else {
+		if (message.author.bot == false) { //Si message n'est pas un message d'un bot
 
-		console.log("message.author");
-		console.log(message.author);
-
-
-		// Get a reply from the bot.
+			console.log("message.author");
+			console.log(message.author);
 
 
-		bot.setVariable("master", message.author.username);
+			// Get a reply from the bot.
 
-		/*bot.reply(username, "Hello, bot!").then(function(reply) {
-			console.log("The bot says: " + reply);
-		  });
-		  */
-		bot
-			.reply(message.author.username, message.content, this)
 
-			.then(function (reply) {
-				console.log("Works");
+			bot.setVariable("master", message.author.username);
 
-				var output = reply;
-				if (output != "ERR: No Reply Matched") {
-					message.channel.send(output)
-				}
-				else {
-					message.channel.send("Oups")
-				}
-			});
+
+			/*bot.reply(username, "Hello, bot!").then(function(reply) {
+				console.log("The bot says: " + reply);
+			  });
+			  */
+			bot
+				.reply(message.author.username, message.content, this)
+
+				.then(function (reply) {
+					console.log("Works");
+
+					var output = reply;
+					if (output != "ERR: No Reply Matched") {
+						message.channel.send(output)
+					}
+					else {
+						message.channel.send("Oups")
+					}
+				});
+		}
 	}
 
 })
 
-/**Client 2 */
 
+/**
+ * Exécution du client2 Discord une fois lancé
+ */
 client2.once('ready', () => {
+
+
 	c2 = cerveauCourant;
 	console.log("Le bot Discord 2 a été correctement initialisé !");
 	bot.loadFile('./brain/' + c2 + '.rive').then(success_handler()).catch(error_handler);
+	bot.setVariable("name", nomBot);
 	client2.user.setPresence({
 		activities: [{
 			name: "Je chatte avec toi 2 ;)"
 		}],
-		status: "dnd"
+		status: "online"
 	});
 });
 
+
+/**
+ * Comportement à la réception d'un message du client2 Discord 
+ */
 client2.on("messageCreate", message => {
 	console.log("Message reçu 2");
 	bot.loadFile('./brain/' + c2 + '.rive').then(success_handler()).catch(error_handler);
 
-	
-	
+
+	bot.setVariable("name", nomBot);
 	bot.sortReplies();
-	
+
 
 
 	let entry = message.content;
-	if (message.content === "!kick2 ") {
-		console.log("Kick bot 2");
+
+
+	if (message.content === "!kick2") {
 		client2.destroy();
-		
-	}
-	if (message.content === "!ping "){
-		message.channel.send("pong")
 
 	}
-	
-	if (message.author.bot == false) { //Si message n'est pas un message d'un bot
+	else {
+
+
+		if (message.author.bot == false) { //Si message n'est pas un message d'un bot
 
 
 
-		bot.sortReplies();
-		// Get a reply from the bot.
+			bot.sortReplies();
+			// Get a reply from the bot.
 
-		bot.setVariable("master", message.author.username);
-		bot.setVariable("name", "botname");
-		/*bot.reply(username, "Hello, bot!").then(function(reply) {
-			console.log("The bot says: " + reply);
-		  });
-		  */
-		bot
-			.reply(message.author.username, message.content, this)
+			bot.setVariable("master", message.author.username);
+			bot.setVariable("name", "botname");
+			/*bot.reply(username, "Hello, bot!").then(function(reply) {
+				console.log("The bot says: " + reply);
+			  });
+			  */
+			bot
+				.reply(message.author.username, message.content, this)
 
-			.then(function (reply) {
-				console.log("Works");
+				.then(function (reply) {
+					console.log("Works");
 
-				var output = reply;
-				if (output != "ERR: No Reply Matched") {
-					message.channel.send(output)
-				}
-				else {
-					message.channel.send("Oups")
-				}
-			});
+					var output = reply;
+					if (output != "ERR: No Reply Matched") {
+						message.channel.send(output)
+					}
+					else {
+						message.channel.send("Oups")
+					}
+				});
+		}
 	}
-
 })
 
 
@@ -171,10 +190,8 @@ var client1Dispo = true;
 var cerveauCourant;
 var c1;
 var c2;
+var nomBot;
 
-//import {PersonIdentifier,PersonService} from "./model/Persons.mjs";
-//let personServiceAccessPoint = new PersonService({url:"http://localhost",port:3001});
-//Question : How do I assigne a task to a person? : It is a PATCH to a Task...
 
 
 const app = express();
@@ -215,28 +232,28 @@ function load_brain_bot(req, res) {
  * @param {*} res //réponse envoyée
  * @return {*} 
  */
-app.put('/:id',(req,res)=>{
+app.put('/:id', (req, res) => {
 	let id = req.params.id;
-	if(!isInt(id)) { 
+	if (!isInt(id)) {
 		//not the expected parameter
 		res.status(400).send('BAD REQUEST');
-	}else{
-		
+	} else {
+
 		let newValues = req.body; //the client is responsible for formating its request with proper syntax.
 		console.log("put en cours");
 		console.log(newValues);
 
 		BotServiceInstance
 			.replaceBot(id, newValues)
-			.then((returnString)=>{
+			.then((returnString) => {
 				console.log(returnString);
 				res.status(201).send('All is OK');
 			})
-			.catch((err)=>{
+			.catch((err) => {
 				console.log(`Error ${err} thrown... stack is : ${err.stack}`);
 				res.status(400).send('BAD REQUEST');
-			});	
-	}	
+			});
+	}
 });
 
 /**
@@ -302,7 +319,7 @@ function getReply(req, res) {
 	// Get a reply from the bot.
 
 	bot.setVariable("name", botname);
-	
+
 	bot
 		.reply(username, message, this)
 		.then(function (reply) {
@@ -360,24 +377,24 @@ app.post('/login', (req, res) => {
 	console.log(req.body);
 	let username = req.body.name;
 	let pwd = req.body.password;
-	console.log("verif login " +username + " " +"& "+ pwd );
+	console.log("verif login " + username + " " + "& " + pwd);
 	if (username == 'admin' && pwd == 'password') {
-   
-	  // If Authorized user
-	  res.json({
-		status: "ok"
-	  });
+
+		// If Authorized user
+		res.json({
+			status: "ok"
+		});
 	} else {
-	  var err = new Error('You are not authenticated!');
-	  err.status = 401;
-	  res.json({
-		status: 'error ' + err.stack,
-		error: err,
-	});
-	console.log(res.body);
-  }
-  
-  });
+		var err = new Error('You are not authenticated!');
+		err.status = 401;
+		res.json({
+			status: 'error ' + err.stack,
+			error: err,
+		});
+		console.log(res.body);
+	}
+
+});
 
 
 //End point to get a bot
@@ -442,7 +459,7 @@ app.delete('/:id', (req, res) => {
  * @return {*} 
  */
 app.post('/', (req, res) => {
-	
+
 
 	let theBotToAdd = req.body;
 
@@ -453,15 +470,16 @@ app.post('/', (req, res) => {
 
 	if (theBotToAdd.discord == true) {
 		try {
-			if (client1Dispo){
-				client.login(theBotToAdd.token);
+			if (client1Dispo) {
+				client.login(theBotToAdd.token); //Lancement du bot Discord sur le client avec le token récupéré
 				client1Dispo = false
 			}
 			else {
-				client2.login(theBotToAdd.token);
+				client2.login(theBotToAdd.token);//Si client pas disponible, lancement du bot Discord sur le client2 avec le token récupéré
 			}
 			cerveauCourant = theBotToAdd.cerveau;
-			
+			nomBot = theBotToAdd.name;
+
 		} catch (error) {
 			console.error(error);
 		}

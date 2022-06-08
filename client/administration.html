@@ -113,10 +113,9 @@
 
             item.innerHTML += ` ${bot.name}`;
             item.innerHTML += ` (${bot.cerveau})`;
-            item.innerHTML += ` (${bot.id})`;
 
             if (bot.discord) {
-                item.innerHTML += ` Discord activé`;
+                item.innerHTML += ` - Discord activé`;
             }
 
 
@@ -319,7 +318,7 @@
         <div class="modal-content">
 
             <header>
-                <h1>Create a new ChatBot</h1>
+                <h1>Créer un nouveau ChatBot</h1>
             </header>
             <p>
                 <label for="inputTitle" x>Nom du ChatBot:</label>
@@ -345,9 +344,9 @@
             </div>
             </p>
 
-            
-            <button id="addNewChatBotButton">Ajouter le ChatBot</button><br>
             <button id="fermerModale">Annuler</button>
+
+            <button id="addNewChatBotButton">Ajouter le ChatBot</button><br>
         </div>
 
     </div>
@@ -357,7 +356,7 @@
 
         <div class="modal-content">
             <header>
-                <h1>Replace a new ChatBot</h1>
+                <h1>Modifier un ChatBot</h1>
             </header>
             <p>
                 <label for="inputTitle2">Nom du ChatBot:</label>

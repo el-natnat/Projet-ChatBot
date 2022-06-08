@@ -1,13 +1,6 @@
 {
   "bots": [
     {
-      "id": 68398,
-      "name": "egsfs",
-      "cerveau": "cerveau1",
-      "discord": false,
-      "token": ""
-    },
-    {
       "id": 52906,
       "name": "Cachalot",
       "cerveau": "cerveau1",
@@ -29,18 +22,11 @@
       "token": ""
     },
     {
-      "id": 4877,
-      "name": "Vador",
+      "id": 11294,
+      "name": "Chatbot1",
       "cerveau": "cerveau1",
-      "discord": false,
-      "token": ""
-    },
-    {
-      "id": 37289,
-      "name": "fzqdfz",
-      "cerveau": "cerveau2",
-      "discord": false,
-      "token": ""
+      "discord": true,
+      "token": "OTgyNzIyNDkwMDgwMDU5Mzky.GSJ5bH.tG4tPaGJze-mTyq8snKn19p5haqaiZEu9wBkiA"
     }
   ]
 }
