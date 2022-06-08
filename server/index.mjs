@@ -46,7 +46,7 @@ client.on("messageCreate", message => {
 	if (message.author.bot == false) { //Si message n'est pas un message d'un bot
 
 
-		console.log(message);
+		console.log(message.author);
 
 		bot.sortReplies();
 		// Get a reply from the bot.
@@ -58,7 +58,7 @@ client.on("messageCreate", message => {
 		  });
 		  */
 		bot
-			.reply(username, message.content, this)
+			.reply(message.author.username, message.content, this)
 
 			.then(function (reply) {
 				console.log("Works");
