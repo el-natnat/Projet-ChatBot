@@ -18,6 +18,7 @@
     var usr;
 
     function init() {
+
       listeDeroulanteBot = document.getElementById("bot-select");
       boutonEnvoyer = document.getElementById("envoyer");
       username = document.getElementById("username");
@@ -27,28 +28,28 @@
       boutonRetour = document.getElementById("submitform2");
       chatavecbot = document.getElementById("chatavecbot");
 
-      
-
-
       chatavecbot.style.visibility = 'hidden';
       //boutonRetour.style.visibility = 'hidden';
 
       boutonRetour.disabled = true;
+      //boutonRetour.disabled = false;
+
       boutonValider.addEventListener("click", valider);
-      boutonValider.addEventListener("click", retour);
+      boutonRetour.addEventListener("click", retour);
       boutonEnvoyer.addEventListener("click", envoyerMessage);
       reloadListDeroulante();
 
     }
 
     function retour(){
-      /*chatavecbot.style.visibility = 'hidden';
+      chatavecbot.style.visibility = 'hidden';
       username.disabled=false;
       listeDeroulanteBot.disabled=false;
-      boutonValider.style.visibility = 'visible';
-      boutonRetour.style.visibility = 'hidden';*/
+      //boutonValider.style.visibility = 'visible';
+      //boutonRetour.style.visibility = 'hidden';
       boutonRetour.disabled = true;
       boutonValider.disabled = false;
+      console.log("retour");
     }
 
     function valider(){
@@ -65,8 +66,16 @@
         console.log("ausodk");
         usr = username.value;
         chatavecbot.style.visibility = 'visible';
+        //boutonValider.style.visibility = 'hidden';
+        boutonRetour.style.visibility = 'visible';
+
+        username.disabled=true;
+        listeDeroulanteBot.disabled=true;
+
         boutonRetour.disabled = false;
         boutonValider.disabled = true;
+
+        console.log("pourquoi?");
         preparerBot();
 
         /*username.disabled=true;
@@ -290,7 +299,7 @@
   <button id="submitform2"> Changer bot </button>
 
   <div id="chatavecbot" class="chat">
-    <label for="discussion">Discussion avec le Bot </label>
+    <label for="discussion"> Discussion avec le Bot </label>
 
     <div id="conv"></div>
 
