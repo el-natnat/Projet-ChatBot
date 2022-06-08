@@ -32,7 +32,19 @@
 
     }
 
-    
+    /**
+     * 
+     */
+    function retour(){
+      chatavecbot.style.visibility = 'hidden';
+      username.disabled=false;
+      listeDeroulanteBot.disabled=false;
+      //boutonValider.style.visibility = 'visible';
+      //boutonRetour.style.visibility = 'hidden';
+      boutonRetour.disabled = true;
+      boutonValider.disabled = false;
+      console.log("retour");
+    }
 
     function valider(){
 

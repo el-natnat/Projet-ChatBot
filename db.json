@@ -1,3 +1,18 @@
 {
-  "bots": []
+  "bots": [
+    {
+      "id": 38861,
+      "name": "Steeve",
+      "cerveau": "cerveau1",
+      "discord": false,
+      "token": ""
+    },
+    {
+      "id": 95890,
+      "name": "Marc",
+      "cerveau": "cerveau2",
+      "discord": false,
+      "token": ""
+    }
+  ]
 }
