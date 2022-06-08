@@ -27,12 +27,12 @@
 
 .chat {
     width: 400px;
-    height: 90%;
+    height: 70%;
     position: fixed;
-    overflow: scroll;
+    overflow-y: scroll;
 
     display: block;
-    margin: 5px;
+    margin: 25px;
     padding: 10px;
     border-radius: 7px;
 

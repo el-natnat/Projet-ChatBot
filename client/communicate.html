@@ -15,8 +15,8 @@
     document.addEventListener('DOMContentLoaded', init);
 
 
-    var usr;
-
+    var usr;//variable comprenant le nom de l'utilisateur du bot
+    //Initialise les variables et elements de la pages, notamment les listeners
     function init() {
 
       listeDeroulanteBot = document.getElementById("bot-select");
@@ -41,6 +41,7 @@
 
     }
 
+    //Fonction lorsqu'on clique sur le bouton "changer bot"
     function retour(){
       chatavecbot.style.visibility = 'hidden';
       username.disabled=false;
@@ -52,6 +53,8 @@
       console.log("retour");
     }
 
+    //Lorsque l'on valide son nom et le bot, le bot charge le cerveau et 
+    //il n'est plus possible de changer de nom ou de bot sans appuyer sur le bouton changer bot
     function valider(){
       console.log("dansfonctionvalider");
 
@@ -87,6 +90,8 @@
         alert("renseigner votre nom et choisissez un bot");
       }
     }
+
+    //recharge la liste des bots
     function reloadListDeroulante() {
 
       /*Suppression des anciens bots
@@ -125,6 +130,7 @@
 
     }
 
+    //Appel au serveur pour charger le cerveau du Bot
     function preparerBot() {
 
       var x = listeDeroulanteBot.selectedIndex;
@@ -191,6 +197,8 @@
 
     }
 
+
+    //Appel au serveur pour envoyer un message
     function envoyerMessage() {
 
       var x = listeDeroulanteBot.selectedIndex;

@@ -1,12 +1,3 @@
-/**
- * Documentation
- * 
- * 
- * 
- * 
- */
-
-
 import {Bot} from "./Bot.mjs";
 import {Low, JSONFile} from 'lowdb';
 import fs from 'express'
@@ -14,7 +5,7 @@ import fs from 'express'
 
 /**
  *
- *
+ * Documentation : classe permettant de gerer l'ensemble des bots dans une base de données.
  * @class BotService
  */
 class BotService{

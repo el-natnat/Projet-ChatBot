@@ -20,7 +20,7 @@
         var idaremplacer=-1;
 
 
-
+        //Initialise les variables et elements de la pages, notamment les listeners
         function init() {
 
             document.getElementById("tokenDiv").style.display = "none";
@@ -54,12 +54,13 @@
 
         }
 
+        //Permet de cacher les modales
         function annuler(){
             document.getElementById('replaceChatBotModal').style.display='none';
-            //document.getElementById('addNewChatBotButton').style.display='none';
         }
 
-        function reloadList() { //Recharge la liste des Bots lancés
+        //Recharge la liste des Bots lancés
+        function reloadList() { 
 
             while (ChatBotListElt.firstChild) {
                 ChatBotListElt.removeChild(ChatBotListElt.firstChild);
@@ -94,6 +95,7 @@
 
         }
 
+        //Creer les elements pour un bot, bouton pour supprimer et pour mettre a jour
         function createItem(bot) {
             let item = document.createElement("li");
 
@@ -109,17 +111,6 @@
             putBtn.setAttribute("onclick", `replaceBot(${bot.id})`);
             item.appendChild(putBtn);
 
-
-
-            // Adding a TALK Button
-            /*let talkBtn = document.createElement("button");
-            talkBtn.innerHTML = "Talk";
-            talkBtn.addEventListener("click", () => { talkBot(bot.id) });
-            item.appendChild(talkBtn);*/
-
-
-
-
             item.innerHTML += ` ${bot.name}`;
             item.innerHTML += ` (${bot.cerveau})`;
             item.innerHTML += ` (${bot.id})`;
@@ -132,7 +123,7 @@
             return item;
         }
 
-
+        //appel au serveur pour supprimer un bot
         function deleteBot(botId) {
             console.log(`deleting bot with Id ${botId}`);
 
@@ -166,9 +157,8 @@
         }
 
 
-        function replaceBot(botId) {//A corriger pour pouvoir changer de cerveau
-
-            
+        //Affiche la modale pour mettre à jour un bot
+        function replaceBot(botId) {
             console.log(`replacement of bot with Id ${botId}`);
 
             let modal = document.getElementById("replaceChatBotModal");
@@ -176,10 +166,9 @@
             
             idaremplacer=botId;
 
-
-
         }
 
+        //Appel au serveur pour remplacer un bot
         function callReplacement(){
 
             console.log(`replacing bot with Id ${idaremplacer}`);
@@ -226,7 +215,7 @@
                 })
         }
            
-
+        //Affiche la case pour entrer le token Discord si la case Discord est cochee
         function afficher() {
             if (boxDiscord.checked) {
                 document.getElementById("tokenDiv").style.display = "block";
@@ -238,19 +227,8 @@
             console.log("CLIQUER");
         }
 
-        /*function afficher(div, affiche) {
-
-
-            if (affiche) {
-                document.getElementById(div).style.display = "block";
-            }
-            else {
-                document.getElementById(div).style.display = "none";
-            }
-        }*/
-
-        function createNewChatBot() { //Fonction appelée lorsqu'on valide le nom du ChatBot et le cerveau ont été renseigné
-
+        //Fonction appelée lorsqu'on valide le nom du ChatBot et le cerveau ont été renseigné
+        function createNewChatBot() { 
 
             inputTitle = document.getElementById("inputTitle");
             //inputBrain = document.querySelector('input[name="choix_cerveau"]:checked');
@@ -313,18 +291,6 @@
         }
 
 
-        /* function talkBot(botId) {//Talk with the bot
-             //Fonction appelée lorsqu'on appuie sur TALK
-             console.log(`Lancement de la conversion avec le bot ${botId}`);
- 
-             let modal = document.getElementById("CommunicateChatBotModal");
- 
-             modal.style.display = "block";
- 
- 
-         }*/
-
-
 
     </script>
 
@@ -379,9 +345,9 @@
             </div>
             </p>
 
-            <p> <button id="fermerModale">Annuler</button>
-            </p>
-            <button id="addNewChatBotButton">Ajouter le ChatBot</button>
+            
+            <button id="addNewChatBotButton">Ajouter le ChatBot</button><br>
+            <button id="fermerModale">Annuler</button>
         </div>
 
     </div>
@@ -416,48 +382,7 @@
 
     </div>
 
-    <!-- Modal pour communiquer avec le bot-->
-    <!--
-    <div id="CommunicateChatBotModal" class="modal">
-
-        <div class="modal-content">
-            <form onSubmit="sendMessage()"> 
-             <form action="http://localhost:3001/reply"   onSubmit="sendMessage()"> 
-                <fieldset>
-                    <legend>Send a Message</legend>
-
-                    <table class="input-table">
-                        <tr>
-                            <td class="text-box">
-                                <input type="text" size="40" name="message" id="message" autocomplete="off"
-                                    placeholder="Talk with the bot">
-                            </td>
-                            <td class="send-button">
-                                <input type="submit" value="Send" onclick="sendMessage()">
-                            </td>
-                        </tr>
-                    </table>
-                </fieldset>
-            </form> 
-            <label>Bot numéro ${botId} </label>
-            <fieldset>
-                <legend>Send a Message</legend>
-
-                <table class="input-table">
-                    <tr>
-                        <td class="text-box">
-                            <input type="text" size="40" name="message" id="message" autocomplete="off"
-                                placeholder="Please wait... loading...">
-                        </td>
-                        <td class="send-button">
-                            <input type="submit" value="Send" onclick="sendMessage()">
-                        </td>
-                    </tr>
-                </table>
-            </fieldset>
-        </div>
-
-    </div>-->
+   
 
 
 

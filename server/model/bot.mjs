@@ -1,5 +1,9 @@
 
 
+/**
+ * @description classe des bots
+ * @class Bot
+ */
 class Bot{
 
   static id = this.id;
