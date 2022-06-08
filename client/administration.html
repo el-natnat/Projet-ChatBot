@@ -17,6 +17,9 @@
 
         let ChatBotListElt;
 
+
+        
+
         function init() {
 
             document.getElementById("tokenDiv").style.display = "none";
@@ -314,7 +317,10 @@
     <div id="newChatBotModal" class="modal">
 
         <div class="modal-content">
-            <h1>Create a new ChatBot</h1>
+            
+            <header>
+                <h1>Create a new ChatBot</h1>
+            </header>
             <p>
                 <label for="inputTitle" x>Nom du ChatBot:</label>
                 <input type="text" id="inputTitle" name="name"></input>
@@ -349,7 +355,10 @@
     <div id="replaceChatBotModal" class="modal">
 
         <div class="modal-content">
-            <h1>Replace a new ChatBot</h1>
+            <header>
+                <h1>Replace a new ChatBot</h1>
+                <span onclick="document.getElementById('replaceChatBotModal').style.display='none'"></span>
+            </header>
             <p>
                 <label for="inputTitle">Nom du ChatBot:</label>
                 <input type="text" id="inputTitle" name="name"></input>

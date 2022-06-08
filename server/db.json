@@ -1,0 +1,54 @@
+{
+  "bots": [
+    {
+      "id": 57689,
+      "name": "Cachalot",
+      "cerveau": "cerveau1"
+    },
+    {
+      "id": 15112,
+      "name": "Steeve",
+      "cerveau": "cerveau1"
+    },
+    {
+      "id": 35996,
+      "name": "Steeve",
+      "cerveau": "cerveau1"
+    },
+    {
+      "id": 58675,
+      "name": "Steeve",
+      "cerveau": "cerveau1"
+    },
+    {
+      "id": 92764,
+      "name": "Steeve",
+      "cerveau": "cerveau1"
+    },
+    {
+      "id": 77196,
+      "name": "Steeve",
+      "cerveau": "cerveau1"
+    },
+    {
+      "id": 5957,
+      "name": "Steeve",
+      "cerveau": "cerveau1"
+    },
+    {
+      "id": 42302,
+      "name": "Steeve",
+      "cerveau": "cerveau1"
+    },
+    {
+      "id": 68919,
+      "name": "Steeve",
+      "cerveau": "cerveau1"
+    },
+    {
+      "id": 43908,
+      "name": "Steeve",
+      "cerveau": "cerveau1"
+    }
+  ]
+}
