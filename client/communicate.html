@@ -11,21 +11,35 @@
     integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
 
-  <script>
+  <script language="javascript">
     document.addEventListener('DOMContentLoaded', init);
 
+
+    var usr;
 
     function init() {
       listeDeroulanteBot = document.getElementById("bot-select");
       boutonEnvoyer = document.getElementById("envoyer");
+      username = document.getElementById("username");
       message = document.getElementById("envoyer_message");
       messageRecu = document.getElementById("conv");
+      boutonValider = document.getElementById("submitform1");
+      chatavecbot = document.getElementById("chatavecbot");
 
+      boutonValider.addEventListener("click", valider)
       boutonEnvoyer.addEventListener("click", envoyerMessage);
       reloadListDeroulante();
 
     }
 
+    
+
+    function valider(){
+
+      usr = username.value;
+      chatavecbot.style.display='block';
+
+    }
     function reloadListDeroulante() {
 
       /*Suppression des anciens bots
@@ -161,12 +175,18 @@
   </nav>
   <label for="bot-select">Choisir un bot:</label>
 
-  <select name="bots" id="bot-select">
+  <select name="bots" id="bot-select" >
     <option value="">--Please choose an option--</option>
-
+    
   </select>
 
-  <div class="chat">
+
+  <label> Username:<br> </label>
+  <input type="text" id="username" placeholder="Username" required>
+  
+  <button id="submitform1"> Valider </button>
+
+  <div id="chatavecbot" class="chat" style.display="none">
     <label for="discussion">Discussion avec le Bot </label>
 
     <div id="conv"></div>

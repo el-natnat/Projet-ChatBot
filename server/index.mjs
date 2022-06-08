@@ -89,10 +89,7 @@ client.on("messageCreate", message => {
 })
 
 
-
-
-
-let BotServiceInstance;
+var BotServiceInstance;
 
 //import {PersonIdentifier,PersonService} from "./model/Persons.mjs";
 //let personServiceAccessPoint = new PersonService({url:"http://localhost",port:3001});
@@ -129,7 +126,28 @@ function load_brain_bot(cerveau, name) {
 }
 
 
-
+app.put('/:id',(req,res)=>{
+	let id = req.params.id;
+	if(!isInt(id)) { //Should I propagate a bad parameter to the model?
+		//not the expected parameter
+		res.status(400).send('BAD REQUEST');
+	}else{
+		
+		let newValues = req.body; //the client is responsible for formating its request with proper syntax.
+		//newValues.assignement = getRandomPerson();
+		console.log(newValues);
+		botServiceInstance
+			.replaceBot(id, newValues)
+			.then((returnString)=>{
+				console.log(returnString);
+				res.status(201).send('All is OK');
+			})
+			.catch((err)=>{
+				console.log(`Error ${err} thrown... stack is : ${err.stack}`);
+				res.status(400).send('BAD REQUEST');
+			});	
+	}	
+});
 
 /**
  * @description fonction permettant de paramétrer le bot à partir du cerveau et préparer les 
@@ -408,7 +426,6 @@ function authentication(req, res, next) {
     }
  
 }
- 
 // First step is the authentication of the client
 app.use(authentication)
 app.use(express.static(path.join(__dirname, 'client')));
