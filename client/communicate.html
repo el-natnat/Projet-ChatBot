@@ -18,27 +18,74 @@
     var usr;
 
     function init() {
+
       listeDeroulanteBot = document.getElementById("bot-select");
       boutonEnvoyer = document.getElementById("envoyer");
       username = document.getElementById("username");
       message = document.getElementById("envoyer_message");
       messageRecu = document.getElementById("conv");
       boutonValider = document.getElementById("submitform1");
+      boutonRetour = document.getElementById("submitform2");
       chatavecbot = document.getElementById("chatavecbot");
 
-      boutonValider.addEventListener("click", valider)
+      chatavecbot.style.visibility = 'hidden';
+      //boutonRetour.style.visibility = 'hidden';
+
+      boutonRetour.disabled = true;
+      //boutonRetour.disabled = false;
+
+      boutonValider.addEventListener("click", valider);
+      boutonRetour.addEventListener("click", retour);
       boutonEnvoyer.addEventListener("click", envoyerMessage);
       reloadListDeroulante();
 
     }
 
-    
+    function retour(){
+      chatavecbot.style.visibility = 'hidden';
+      username.disabled=false;
+      listeDeroulanteBot.disabled=false;
+      //boutonValider.style.visibility = 'visible';
+      //boutonRetour.style.visibility = 'hidden';
+      boutonRetour.disabled = true;
+      boutonValider.disabled = false;
+      console.log("retour");
+    }
 
     function valider(){
+      console.log("dansfonctionvalider");
 
-      usr = username.value;
-      chatavecbot.style.display='block';
+      var x = listeDeroulanteBot.selectedIndex;
+      var y = listeDeroulanteBot.options;
+/*
+      idBot = (listeDeroulanteBot.options[listeDeroulanteBot.selectedIndex]).getAttribute('id');
+      nomBot = (listeDeroulanteBot.options[listeDeroulanteBot.selectedIndex]).getAttribute('name');
+*/
 
+      if(username.value!= null && username.value!= "" && y[x].index!=0){
+        console.log("ausodk");
+        usr = username.value;
+        chatavecbot.style.visibility = 'visible';
+        //boutonValider.style.visibility = 'hidden';
+        boutonRetour.style.visibility = 'visible';
+
+        username.disabled=true;
+        listeDeroulanteBot.disabled=true;
+
+        boutonRetour.disabled = false;
+        boutonValider.disabled = true;
+
+        console.log("pourquoi?");
+        preparerBot();
+
+        /*username.disabled=true;
+        listeDeroulanteBot.disabled=true;*/
+        //boutonRetour.style.visibility = 'visible';
+
+
+      } else {
+        alert("renseigner votre nom et choisissez un bot");
+      }
     }
     function reloadListDeroulante() {
 
@@ -77,7 +124,73 @@
 
 
     }
-   
+
+    function preparerBot() {
+
+      var x = listeDeroulanteBot.selectedIndex;
+      var y = listeDeroulanteBot.options;
+
+      console.log("Index: " + y[x].index + " is " + y[x].text);
+      idBot = (listeDeroulanteBot.options[listeDeroulanteBot.selectedIndex]).getAttribute('id');
+      nomBot = (listeDeroulanteBot.options[listeDeroulanteBot.selectedIndex]).getAttribute('name');
+      console.log(nomBot);
+      console.log(idBot);
+
+      if (idBot != null) {
+        console.log("Communication lancée");
+
+        console.log(message.value);
+
+        //When pushing the Send button
+
+        let myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+
+        let payload = {
+          botId: idBot
+        };
+        let myBody = JSON.stringify(payload);
+        let myInit = {
+          method: 'POST',
+          headers: myHeaders,
+          mode: 'cors',
+          cache: 'default',
+          body: myBody
+        };
+        let myURL = "http://localhost:3001/load"; //URL du serveur qui va être lancé
+
+
+        //launch the request
+        fetch(myURL, myInit)
+          .then((httpResponse) => {
+            return httpResponse.text();
+          })
+          .then((responseBody) => {
+            //reloadList();
+            //clear fields
+            var response = JSON.parse(responseBody)
+            console.log(response.status);
+
+            console.log(idBot);
+          })
+          .catch((err) => {
+            console.log(`ERROR : ${err}`);
+          })
+
+        console.log("Requête POST envoyée avec succès");
+        console.log(`Le message "${message.value}" a été envoyé dans la requête post au Bot "" `);
+
+
+      }
+
+      else {
+        alert("Veuillez sélectionner un Bot pour pouvoir communiquer");
+        console.log("Pas de bot sélectionné");
+      }
+
+
+    }
+
     function envoyerMessage() {
 
       var x = listeDeroulanteBot.selectedIndex;
@@ -100,7 +213,7 @@
         myHeaders.append('Content-Type', 'application/json');
 
         let payload = {
-          username: "localuser", //Celui qui parle au bot
+          username: usr, //Celui qui parle au bot
           message: message.value,
           botname: nomBot
 
@@ -126,8 +239,6 @@
           .then((responseBody) => {
             //reloadList();
             //clear fields
-
-
             var response = JSON.parse(responseBody)
             console.log(response.status);
 
@@ -164,7 +275,7 @@
 
 <body>
   <header>
-    <h1>Communiquer avec les Bots</h1>
+    <h1><a class="nav-link" href="./index.html">Communiquer avec les Bots</a> </h1>
   </header>
 
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -185,9 +296,10 @@
   <input type="text" id="username" placeholder="Username" required>
   
   <button id="submitform1"> Valider </button>
+  <button id="submitform2"> Changer bot </button>
 
-  <div id="chatavecbot" class="chat" style.display="none">
-    <label for="discussion">Discussion avec le Bot </label>
+  <div id="chatavecbot" class="chat">
+    <label for="discussion"> Discussion avec le Bot </label>
 
     <div id="conv"></div>
 
