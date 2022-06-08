@@ -10,7 +10,7 @@ import { BotService } from "./model/BotService_LowDb.mjs";
 
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import {fileURLToPath} from 'url';
 /* Partie Discord */
 import Discord from 'discord.js';
 
@@ -28,7 +28,7 @@ console.log('directory-name ', __dirname);
 process.on('uncaughtException', function (err) {
 	console.error(err);
 	console.log("Node NOT Exiting...");
-});
+  });
 
 const myIntents = new Discord.Intents();
 myIntents.add(Discord.Intents.FLAGS.GUILD_MESSAGES);
@@ -37,8 +37,7 @@ const client = new Discord.Client({ intents: myIntents });
 
 
 client.once('ready', () => {
-	console.log("Le bot Discord 1 a été correctement initialisé !");
-	bot.loadFile('./brain/' + cerveauCourant + '.rive').then(success_handler()).catch(error_handler);
+	console.log("Le bot Discord a été correctement initialisé !");
 	client.user.setPresence({
 		activities: [{
 			name: "Je chatte avec toi ;)"
@@ -49,9 +48,6 @@ client.once('ready', () => {
 
 client.on("messageCreate", message => {
 	console.log("Message reçu");
-	
-	bot.sortReplies();
-	bot.setVariable("name", "botname");
 
 
 	let entry = message.content;
@@ -59,24 +55,23 @@ client.on("messageCreate", message => {
 		message.channel.send("Pong.")
 		
 	}*/
-
+	
 	if (message.author.bot == false) { //Si message n'est pas un message d'un bot
 
-		console.log("message.author");
-		console.log(message.author);
 
+		console.log(message);
 
+		bot.sortReplies();
 		// Get a reply from the bot.
 
-
 		bot.setVariable("master", message.author.username);
-
+		bot.setVariable("name", "botname");
 		/*bot.reply(username, "Hello, bot!").then(function(reply) {
 			console.log("The bot says: " + reply);
 		  });
 		  */
 		bot
-			.reply(message.author.username, message.content, this)
+			.reply(username, message.content, this)
 
 			.then(function (reply) {
 				console.log("Works");
@@ -94,8 +89,6 @@ client.on("messageCreate", message => {
 })
 
 
-
-var cerveauCourant="cerveau1";
 var BotServiceInstance;
 
 //import {PersonIdentifier,PersonService} from "./model/Persons.mjs";
@@ -123,15 +116,15 @@ app.post('/load', load_brain_bot);
  * @param {*} cerveau cerveau du bot
  * @param {*} name nom du bot
  */
-function load_brain_bot(cerveau, name) {
+function load_brain_bot(req, res) {
+	bot = new RiveScript();
+	let cerveau = BotServiceInstance.getBot(req.body.botId).cerveau;
 	// Create the bot.
 	console.log(cerveau);
-	console.log(name);
 	//bot.loadFile('./server/brain/cerveau1.rive').then(success_handler).catch(error_handler);
 	bot.loadFile('./brain/' + cerveau + '.rive').then(success_handler()).catch(error_handler);
 
 	res.status(201).send('All is OK');
-
 }
 
 /**
@@ -143,27 +136,26 @@ function load_brain_bot(cerveau, name) {
  */
 app.put('/:id',(req,res)=>{
 	let id = req.params.id;
-	console.log(id);
 	if(!isInt(id)) { 
 		//not the expected parameter
 		res.status(400).send('BAD REQUEST');
-	} else {
-
+	}else{
+		
 		let newValues = req.body; //the client is responsible for formating its request with proper syntax.
 		console.log("put en cours");
 		console.log(newValues);
 
 		BotServiceInstance
 			.replaceBot(id, newValues)
-			.then((returnString) => {
+			.then((returnString)=>{
 				console.log(returnString);
 				res.status(201).send('All is OK');
 			})
-			.catch((err) => {
+			.catch((err)=>{
 				console.log(`Error ${err} thrown... stack is : ${err.stack}`);
 				res.status(400).send('BAD REQUEST');
-			});
-	}
+			});	
+	}	
 });
 
 /**
@@ -229,7 +221,7 @@ function getReply(req, res) {
 	// Get a reply from the bot.
 
 	bot.setVariable("name", botname);
-
+	
 	bot
 		.reply(username, message, this)
 		.then(function (reply) {
@@ -287,24 +279,24 @@ app.post('/login', (req, res) => {
 	console.log(req.body);
 	let username = req.body.name;
 	let pwd = req.body.password;
-	console.log("verif login " + username + " " + "& " + pwd);
+	console.log("verif login " +username + " " +"& "+ pwd );
 	if (username == 'admin' && pwd == 'password') {
-
-		// If Authorized user
-		res.json({
-			status: "ok"
-		});
+   
+	  // If Authorized user
+	  res.json({
+		status: "ok"
+	  });
 	} else {
-		var err = new Error('You are not authenticated!');
-		err.status = 401;
-		res.json({
-			status: 'error ' + err.stack,
-			error: err,
-		});
-		console.log(res.body);
-	}
-
-});
+	  var err = new Error('You are not authenticated!');
+	  err.status = 401;
+	  res.json({
+		status: 'error ' + err.stack,
+		error: err,
+	});
+	console.log(res.body);
+  }
+  
+  });
 
 
 //End point to get a bot
@@ -379,11 +371,8 @@ app.post('/', (req, res) => {
 
 
 	if (theBotToAdd.discord == true) {
-		console.log("Didi");
-		console.log(theBotToAdd);
 		try {
 			client.login(theBotToAdd.token);
-			cerveauCourant = theBotToAdd.cerveau;
 		} catch (error) {
 			console.error(error);
 		}

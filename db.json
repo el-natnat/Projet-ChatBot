@@ -2,7 +2,7 @@
   "bots": [
     {
       "id": 68398,
-      "name": "Steeve",
+      "name": "egsfs",
       "cerveau": "cerveau1",
       "discord": false,
       "token": ""
@@ -32,6 +32,13 @@
       "id": 4877,
       "name": "Vador",
       "cerveau": "cerveau1",
+      "discord": false,
+      "token": ""
+    },
+    {
+      "id": 37289,
+      "name": "fzqdfz",
+      "cerveau": "cerveau2",
       "discord": false,
       "token": ""
     }
