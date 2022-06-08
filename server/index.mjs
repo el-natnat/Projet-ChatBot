@@ -8,9 +8,22 @@ import RiveScript from 'rivescript';
 import { Bot } from "./model/Bot.mjs";
 import { BotService } from "./model/BotService_LowDb.mjs";
 
+import fs from 'fs';
+import path from 'path';
+import {fileURLToPath} from 'url';
 /* Partie Discord */
 import Discord from 'discord.js';
 
+const __filename = fileURLToPath(import.meta.url);
+
+
+const __dirname = path.dirname(__filename);
+console.log('directory-name ', __dirname);
+
+//console.log(path.join(__dirname, '/dist', 'index.html'));
+
+
+//import Discord from 'discord.js';
 /* Empêche les crashs */
 process.on('uncaughtException', function (err) {
 	console.error(err);
@@ -76,10 +89,7 @@ client.on("messageCreate", message => {
 })
 
 
-
-
-
-let BotServiceInstance;
+var BotServiceInstance;
 
 //import {PersonIdentifier,PersonService} from "./model/Persons.mjs";
 //let personServiceAccessPoint = new PersonService({url:"http://localhost",port:3001});
@@ -99,6 +109,13 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 var bot = new RiveScript();
 
+app.post('/load', load_brain_bot);
+
+/**
+ * @description charge le cerveau du bot
+ * @param {*} cerveau cerveau du bot
+ * @param {*} name nom du bot
+ */
 function load_brain_bot(cerveau, name) {
 	// Create the bot.
 	console.log(cerveau);
@@ -109,9 +126,32 @@ function load_brain_bot(cerveau, name) {
 }
 
 
+app.put('/:id',(req,res)=>{
+	let id = req.params.id;
+	if(!isInt(id)) { //Should I propagate a bad parameter to the model?
+		//not the expected parameter
+		res.status(400).send('BAD REQUEST');
+	}else{
+		
+		let newValues = req.body; //the client is responsible for formating its request with proper syntax.
+		//newValues.assignement = getRandomPerson();
+		console.log(newValues);
+		botServiceInstance
+			.replaceBot(id, newValues)
+			.then((returnString)=>{
+				console.log(returnString);
+				res.status(201).send('All is OK');
+			})
+			.catch((err)=>{
+				console.log(`Error ${err} thrown... stack is : ${err.stack}`);
+				res.status(400).send('BAD REQUEST');
+			});	
+	}	
+});
 
-
-
+/**
+ * @description fonction permettant de paramétrer le bot à partir du cerveau et préparer les 
+ */
 function success_handler() {
 	console.log('Brain loaded!');
 
@@ -127,13 +167,6 @@ function success_handler() {
 
 	// Set up routes.
 	app.post('/reply', getReply);
-
-	//app.get('*', showUsage);
-
-	/*// Start listening.
-	app.listen(3001, function () {
-	   console.log('Listening on http://localhost:3001');
-	});*/
 }
 
 function error_handler(loadcount, err) {
@@ -145,9 +178,9 @@ function error_handler(loadcount, err) {
 // POST to /reply to get a RiveScript reply.
 /**
  *
- *
- * @param {*} req
- * @param {*} res
+ * @description permet au bot de renvoyer une réponse
+ * @param {*} req //requête reçue
+ * @param {*} res //réponse envoyée
  * @return {*} 
  */
 function getReply(req, res) {
@@ -175,14 +208,11 @@ function getReply(req, res) {
 		}
 	}
 
-	bot.sortReplies();//dangereux à mettre là mais erreur sinon
+	bot.sortReplies();
 	// Get a reply from the bot.
 
 	bot.setVariable("name", botname);
-	/*bot.reply(username, "Hello, bot!").then(function(reply) {
-		console.log("The bot says: " + reply);
-	  });
-	  */
+	
 	bot
 		.reply(username, message, this)
 		.then(function (reply) {
@@ -206,39 +236,14 @@ function getReply(req, res) {
 		});
 }
 
-// All other routes shows the usage to test the /reply route.
 
 /**
  *
- *
- * @param {*} req
- * @param {*} res
+ * @description permet de récupérer la liste des bots
+ * @param {*} req //requête reçue
+ * @param {*} res //réponse envoyée
+ * @return {*} 
  */
-function showUsage(req, res) {
-	var egPayload = {
-		username: 'soandso',
-		message: 'Hello script',
-		vars: {
-			name: 'Soandso',
-		},
-	};
-	res.writeHead(200, { 'Content-Type': 'text/plain' });
-	res.write('Usage: curl -i \\\n');
-	res.write('   -H "Content-Type: application/json" \\\n');
-	res.write("   -X POST -d '" + JSON.stringify(egPayload) + "' \\\n");
-	res.write('   http://localhost:3001/reply');
-	res.end();
-}
-
-// Send a JSON error to the browser.
-function error(res, message) {
-	res.json({
-		status: 'error',
-		message: message,
-	});
-}
-
-
 app.get('/', (req, res) => {
 	try {
 		let myArrayOfBots;
@@ -253,14 +258,46 @@ app.get('/', (req, res) => {
 	}
 });
 
-/*app.post('/reply', (req, res)=>{
-	//let body = req.body;
-	console.log("là ?");
-	res.status(200).json(["toto"]);
+/**
+ *
+ * @description fonction d'authentification
+ * @param {*} req //requête reçue
+ * @param {*} res //réponse envoyée
+ * @return {*} 
+ */
+app.post('/login', (req, res) => {
+	// Insert Login Code Here
+	console.log(req.body);
+	let username = req.body.name;
+	let pwd = req.body.password;
+	console.log("verif login " +username + " " +"& "+ pwd );
+	if (username == 'admin' && pwd == 'password') {
+   
+	  // If Authorized user
+	  res.json({
+		status: "ok"
+	  });
+	} else {
+	  var err = new Error('You are not authenticated!');
+	  err.status = 401;
+	  res.json({
+		status: 'error ' + err.stack,
+		error: err,
+	});
+	console.log(res.body);
+  }
+  
+  });
 
-});*/
 
 //End point to get a bot
+/**
+ *
+ * @description permet de récupérer un bot
+ * @param {*} req //requête reçue
+ * @param {*} res //réponse envoyée
+ * @return {*} 
+ */
 app.get('/:idd', (req, res) => {
 	let id = req.params.idd;
 	if (!isInt(id)) {
@@ -278,8 +315,14 @@ app.get('/:idd', (req, res) => {
 	}
 });
 
+/**
+ *
+ * @description permet de supprimer un bot
+ * @param {*} req //requête reçue
+ * @param {*} res //réponse envoyée
+ * @return {*} 
+ */
 app.delete('/:id', (req, res) => {
-
 	console.log(req.body);
 	let id = req.params.id;
 	console.log(id);
@@ -300,24 +343,14 @@ app.delete('/:id', (req, res) => {
 	}
 });
 
-/*
-//create a new task (POST HTTP method)
-app.post('/v2/tasks/',(req,res)=>{
-	let theTaskToAdd = req.body;
-	BotServiceInstance
-		.addTask(theTaskToAdd) 
-		.then((returnString)=>{
-			console.log(returnString);
-			res.status(201).send('All is OK');
-		})
-		.catch((err)=>{
-			console.log(`Error ${err} thrown... stack is : ${err.stack}`);
-			res.status(400).send('BAD REQUEST');
-		});	
-});
-*/
-
 //useless now
+/**
+ *
+ * @description permet d'ajouter un bot
+ * @param {*} req //requête reçue
+ * @param {*} res //réponse envoyée
+ * @return {*} 
+ */
 app.post('/', (req, res) => {
 	console.log('cachalot');
 
@@ -349,7 +382,6 @@ app.post('/', (req, res) => {
 		.addBot(theBotToAdd)
 		.then((returnString) => {
 			console.log(returnString);
-
 			res.status(201).send(theBotToAdd);
 		})
 		.catch((err) => {
@@ -358,84 +390,67 @@ app.post('/', (req, res) => {
 		});
 });
 
-/*
-app.patch('/v2/tasks/:id',(req,res)=>{
-	let id = req.params.id;
-	if(!isInt(id)) { //Should I propagate a bad parameter to the model?
-		//not the expected parameter
-		res.status(400).send('BAD REQUEST');
-	}else{
-		let newValues = req.body; //the client is responsible for formating its request with proper syntax.
-		BotServiceInstance
-			.updateTask(id, newValues)
-			.then((returnString)=>{
-				console.log(returnString);
-				res.status(201).send('All is OK');
-			})
-			.catch((err)=>{
-				console.log(`Error ${err} thrown... stack is : ${err.stack}`);
-				res.status(400).send('BAD REQUEST');
-			});	
-	}	
-});*/
-/*
-app.put('/v2/tasks/:id',(req,res)=>{
-	let id = req.params.id;
-	if(!isInt(id)) { //Should I propagate a bad parameter to the model?
-		//not the expected parameter
-		res.status(400).send('BAD REQUEST');
-	}else{
-		let newValues = req.body; //the client is responsible for formating its request with proper syntax.
-		BotServiceInstance
-			.replaceTask(id, newValues)
-			.then((returnString)=>{
-				console.log(returnString);
-				res.status(201).send('All is OK');
-			})
-			.catch((err)=>{
-				console.log(`Error ${err} thrown... stack is : ${err.stack}`);
-				res.status(400).send('BAD REQUEST');
-			});	
-	}	
-});*/
 
-/*
-let id = Math.floor(Math.random() * Math.floor(100000)) ;
-let randomPerson = await getRandomPerson();
-let aTask ={ //UGLY
-	'id':id,
-	'title':'Random Title',
-	'assignement':randomPerson
-};*/
+/**
+ *
+ * @description permet au bot de renvoyer une réponse
+ * @param {*} req //requête reçue
+ * @param {*} res //réponse envoyée
+ * @return {*} 
+ */
+function authentication(req, res, next) {
+    var authheader = req.headers.authorization;
+    console.log(req.headers);
+ 
+    if (!authheader) {
+        var err = new Error('You are not authenticated!');
+        res.setHeader('WWW-Authenticate', 'Basic');
+        err.status = 401;
+        return next(err)
+    }
+ 
+    var auth = new Buffer.from(authheader.split(' ')[1],
+    'base64').toString().split(':');
+    var user = auth[0];
+    var pass = auth[1];
+ 
+    if (user == 'admin' && pass == 'password') {
+ 
+        // If Authorized user
+        next();
+    } else {
+        var err = new Error('You are not authenticated!');
+        res.setHeader('WWW-Authenticate', 'Basic');
+        err.status = 401;
+        return next(err);
+    }
+ 
+}
+// First step is the authentication of the client
+app.use(authentication)
+app.use(express.static(path.join(__dirname, 'client')));
 
+
+
+/**
+ * Création du service de bot
+ */
 BotService.create().then(ts => {
 	BotServiceInstance = ts;
 	/*BotServiceInstance
 		.catch((err)=>{console.log(err);});*/
 
-	BotServiceInstance.addBot({ name: 'Steeve', cerveau: 'cerveau1' }).then(idBot => {
+	/*BotServiceInstance.addBot({ name: 'Steeve', cerveau: 'cerveau1' }).then(idBot => {
 		let newBot = BotServiceInstance.getBot(idBot);
 		console.log(newBot.cerveau);
 		load_brain_bot(newBot.cerveau, newBot.name);
-
-
-	});
+	});*/
 
 	app.listen(port, () => {
 		console.log(`Example app listening at http://localhost:${port}`)
 	});
 });
-/*
-app.listen(port, () => {
-	console.log(`Example app listening at http://localhost:${port}`)
-});*/
-//HELPER
-/*
-async function getRandomPerson(){
-	let tempArray = await personServiceAccessPoint.getAllPersons();
-	let key = Math.floor(Math.random() * tempArray.length) ;
-	return tempArray[key];
-}*/
+
 
 function isInt(value) {
 	let x = parseFloat(value);

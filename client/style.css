@@ -1,3 +1,9 @@
+.formulaire{
+    justify-content: space-between;
+    width: 60%;
+    margin: 50px;
+}
+
 .modal {
     display: none;
     position: fixed;
