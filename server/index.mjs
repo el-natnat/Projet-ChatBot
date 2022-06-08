@@ -114,18 +114,14 @@ app.post('/load', load_brain_bot);
 /**
  * @description charge le cerveau du bot
  * @param {*} cerveau cerveau du bot
+ * @param {*} name nom du bot
  */
-function load_brain_bot(req, res) {
+function load_brain_bot(cerveau, name) {
 	// Create the bot.
-	console.log("chargement du cerveau");
-	console.log(req.body);
-
-	let cerveau = BotServiceInstance.getBot(req.body.botId).cerveau;
 	console.log(cerveau);
+	console.log(name);
 	//bot.loadFile('./server/brain/cerveau1.rive').then(success_handler).catch(error_handler);
 	bot.loadFile('./brain/' + cerveau + '.rive').then(success_handler()).catch(error_handler);
-	
-	res.status(201).send('All is OK');
 
 }
 
@@ -402,7 +398,7 @@ app.post('/', (req, res) => {
  * @param {*} res //réponse envoyée
  * @return {*} 
  */
-/*function authentication(req, res, next) {
+function authentication(req, res, next) {
     var authheader = req.headers.authorization;
     console.log(req.headers);
  
@@ -429,10 +425,10 @@ app.post('/', (req, res) => {
         return next(err);
     }
  
-}*/
+}
 // First step is the authentication of the client
-/*app.use(authentication)
-app.use(express.static(path.join(__dirname, 'client')));*/
+app.use(authentication)
+app.use(express.static(path.join(__dirname, 'client')));
 
 
 
