@@ -40,6 +40,8 @@ const client2 = new Discord.Client({ intents: myIntents });
 
 
 client.once('ready', () => {
+	c1= cerveauCourant
+	bot.loadFile('./brain/' + c1 + '.rive').then(success_handler()).catch(error_handler);
 	console.log("Le bot Discord a été correctement initialisé !");
 	client.user.setPresence({
 		activities: [{
@@ -50,11 +52,12 @@ client.once('ready', () => {
 });
 
 client.on("messageCreate", message => {
+	bot.loadFile('./brain/' + c1 + '.rive').then(success_handler()).catch(error_handler);
+
 	console.log("Message reçu");
-	console.log(client);
 	
 	bot.sortReplies();
-	bot.setVariable("name", "botname");
+	
 
 
 	let entry = message.content;
@@ -99,8 +102,9 @@ client.on("messageCreate", message => {
 /**Client 2 */
 
 client2.once('ready', () => {
+	c2 = cerveauCourant;
 	console.log("Le bot Discord 2 a été correctement initialisé !");
-	bot.loadFile('./brain/' + cerveauCourant + '.rive').then(success_handler()).catch(error_handler);
+	bot.loadFile('./brain/' + c2 + '.rive').then(success_handler()).catch(error_handler);
 	client2.user.setPresence({
 		activities: [{
 			name: "Je chatte avec toi 2 ;)"
@@ -111,22 +115,28 @@ client2.once('ready', () => {
 
 client2.on("messageCreate", message => {
 	console.log("Message reçu 2");
+	bot.loadFile('./brain/' + c2 + '.rive').then(success_handler()).catch(error_handler);
+
 	
 	
 	bot.sortReplies();
-	bot.setVariable("name", "botname");
+	
 
 
 	let entry = message.content;
-	/*if (message.content === "!ping") {
-		message.channel.send("Pong.")
+	if (message.content === "!kick2 ") {
+		console.log("Kick bot 2");
+		client2.destroy();
 		
-	}*/
+	}
+	if (message.content === "!ping "){
+		message.channel.send("pong")
+
+	}
 	
 	if (message.author.bot == false) { //Si message n'est pas un message d'un bot
 
 
-		console.log(message);
 
 		bot.sortReplies();
 		// Get a reply from the bot.
@@ -138,7 +148,7 @@ client2.on("messageCreate", message => {
 		  });
 		  */
 		bot
-			.reply(username, message.content, this)
+			.reply(message.author.username, message.content, this)
 
 			.then(function (reply) {
 				console.log("Works");
@@ -159,6 +169,8 @@ client2.on("messageCreate", message => {
 var BotServiceInstance;
 var client1Dispo = true;
 var cerveauCourant;
+var c1;
+var c2;
 
 //import {PersonIdentifier,PersonService} from "./model/Persons.mjs";
 //let personServiceAccessPoint = new PersonService({url:"http://localhost",port:3001});
