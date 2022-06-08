@@ -34,6 +34,7 @@ const myIntents = new Discord.Intents();
 myIntents.add(Discord.Intents.FLAGS.GUILD_MESSAGES);
 myIntents.add(Discord.Intents.FLAGS.GUILDS);
 const client = new Discord.Client({ intents: myIntents });
+const client2 = new Discord.Client({ intents: myIntents });
 
 
 client.once('ready', () => {
@@ -48,6 +49,70 @@ client.once('ready', () => {
 
 client.on("messageCreate", message => {
 	console.log("Message reçu");
+	console.log(client);
+	
+	bot.sortReplies();
+	bot.setVariable("name", "botname");
+
+
+	let entry = message.content;
+	/*if (message.content === "!ping") {
+		message.channel.send("Pong.")
+		
+	}*/
+
+	if (message.author.bot == false) { //Si message n'est pas un message d'un bot
+
+		console.log("message.author");
+		console.log(message.author);
+
+
+		// Get a reply from the bot.
+
+
+		bot.setVariable("master", message.author.username);
+
+		/*bot.reply(username, "Hello, bot!").then(function(reply) {
+			console.log("The bot says: " + reply);
+		  });
+		  */
+		bot
+			.reply(message.author.username, message.content, this)
+
+			.then(function (reply) {
+				console.log("Works");
+
+				var output = reply;
+				if (output != "ERR: No Reply Matched") {
+					message.channel.send(output)
+				}
+				else {
+					message.channel.send("Oups")
+				}
+			});
+	}
+
+})
+
+/**Client 2 */
+
+client2.once('ready', () => {
+	console.log("Le bot Discord 2 a été correctement initialisé !");
+	bot.loadFile('./brain/' + cerveauCourant + '.rive').then(success_handler()).catch(error_handler);
+	client2.user.setPresence({
+		activities: [{
+			name: "Je chatte avec toi 2 ;)"
+		}],
+		status: "dnd"
+	});
+});
+
+client2.on("messageCreate", message => {
+	console.log("Message reçu 2");
+	
+	
+	bot.sortReplies();
+	bot.setVariable("name", "botname");
 
 
 	let entry = message.content;
@@ -90,6 +155,8 @@ client.on("messageCreate", message => {
 
 
 var BotServiceInstance;
+var client1Dispo = true;
+var cerveauCourant;
 
 //import {PersonIdentifier,PersonService} from "./model/Persons.mjs";
 //let personServiceAccessPoint = new PersonService({url:"http://localhost",port:3001});
@@ -372,7 +439,15 @@ app.post('/', (req, res) => {
 
 	if (theBotToAdd.discord == true) {
 		try {
-			client.login(theBotToAdd.token);
+			if (client1Dispo){
+				client.login(theBotToAdd.token);
+				client1Dispo = false
+			}
+			else {
+				client2.login(theBotToAdd.token);
+			}
+			cerveauCourant = theBotToAdd.cerveau;
+			
 		} catch (error) {
 			console.error(error);
 		}

@@ -19,7 +19,7 @@
 
         var idaremplacer=-1;
 
-        
+
 
         function init() {
 
@@ -30,8 +30,15 @@
             boxDiscord.addEventListener("click", () => afficher());
 
             reloadList();
+            
 
             modal = document.getElementById("newChatBotModal");
+
+            
+
+            fermerModale = document.getElementById("fermerModale"); 
+            fermerModale.addEventListener("click", () => { modal.style.display = "none"; });
+
 
             newChatBotButton = document.getElementById("newChatBotButton");
             newChatBotButton.addEventListener("click", () => { modal.style.display = "block"; });
@@ -344,7 +351,7 @@
     <div id="newChatBotModal" class="modal">
 
         <div class="modal-content">
-            
+
             <header>
                 <h1>Create a new ChatBot</h1>
             </header>
@@ -372,7 +379,8 @@
             </div>
             </p>
 
-
+            <p> <button id="fermerModale">Annuler</button>
+            </p>
             <button id="addNewChatBotButton">Ajouter le ChatBot</button>
         </div>
 
